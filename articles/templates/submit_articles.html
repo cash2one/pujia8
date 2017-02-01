@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal" style="position: relative; width: 100%; top: auto; left: auto; margin: 0 auto; margin-bottom: 30px; z-index: 1">
+                <div class="modal-body">
+                    {% if user.is_authenticated %}
+                        <form action="." method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <table>
+                                {{ form.as_table }}
+                            </table>
+                            <input class="btn btn-primary" type="submit" value="提交"/>
+                        </form>
+                    {% else %}
+                        <p>请先<a href="/account/login/" title="登录">登录</a>，如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

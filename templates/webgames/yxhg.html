@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load comments_tags %}
+{% load flatpages %}
+
+{% block title %}
+    英雄皇冠_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>英雄皇冠-卡牌竞技类</h3>
+                </div>
+                <div class="modal-body">
+                    {% get_flatpages '/wg_yxhg/' as wg_yxhg_pages %}{% for wg_yxhg in wg_yxhg_pages %}{{ wg_yxhg.content|safe }}{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span8">
+            <div id="comments">
+                <div id="quick_reply" class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发射言弹</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_comments_list for args as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+
+        </div>
+        <div class="span4">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% endblock %}

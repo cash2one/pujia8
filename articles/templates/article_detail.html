@@ -1,0 +1,52 @@
+﻿{% extends "base.html" %}
+
+{% block title %}[{{ article.get_category_display }}]{% ifequal article.subject '0' %}【{{ article.team }}】{% endifequal %}{{ article.title }}_扑家汉化平台_扑家汉化组{% endblock %}
+
+{% block content %}{% load thumbnail %}{% load flatpages %}{% load gravatar %}
+    <ul class="breadcrumb">
+        <li><a href="/">首页</a> <span class="divider">/</span></li>
+        {% ifequal article.subject '0' %}<li><a href="/articles/news/">汉化资讯</a> <span class="divider">/</span></li>{% endifequal %}{% ifequal article.subject '1' %}<li><a href="/articles/topics/">汉化交流</a> <span class="divider">/</span></li>{% endifequal %}
+        <li class="active">{{ article.title }}</li>
+    </ul>
+    <div class="row">
+        <div class="span8">
+            <div class="modal" style="position: relative; width: 100%; top: auto; left: auto; margin: 0 auto; margin-bottom: 30px; z-index: 1">
+                <div class="modal-header">
+                    <h3>[{{ article.get_category_display }}]{% ifequal article.subject '0' %}【{{ article.team }}】{% endifequal %}{{ article.title }}<span class="pull-right">{% gravatar_for_user article.name %}</span></h3>
+                    <small>作者：{{ article.name }} 时间：{{ article.time|date:"Y-m-d" }} 人气：{{ article.count }}℃ 来源：<a target="_blank" href="{{ article.sourceurl }}">查看</a>{% if perm_edit_article %}<a target="_blank" href="/articles/edit/{{ subject }}/{{ article.id }}/"><span class="label label-info">Edit</span></a>{% endif %}
+                        <script type="text/javascript" charset="utf-8">
+                            (function(){
+                                var _w = 16 , _h = 16;
+                                var param = {
+                                    url:location.href,
+                                    type:'3',
+                                    count:'', /**是否显示分享数，1显示(可选)*/
+                                    appkey:'912885643', /**您申请的应用appkey,显示分享来源(可选)*/
+                                    title:'#{{ article.get_category_display }}#{% ifequal article.subject '0' %}【{{ article.team }}】{% endifequal %}{{ article.title }}', /**分享的文字内容(可选，默认为所在页面的title)*/
+                                    pic:'', /**分享图片的路径(可选)*/
+                                    ralateUid:'2375605947', /**关联用户的UID，分享微博会@该用户(可选)*/
+                                    language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+                                    rnd:new Date().valueOf()
+                                }
+                                var temp = [];
+                                for( var p in param ){
+                                    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                                }
+                                document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+                            })()
+                        </script>
+                    </small>
+                </div>
+                <div class="modal-body">
+                    {% include 'ad740.html' %}
+                    {{ article.content|safe }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% endblock %}

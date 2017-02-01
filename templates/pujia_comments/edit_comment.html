@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="span7">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                        <textarea style="width:98%;" id="id_content" name="content" rows="10">{{ edit_comment.content }}</textarea>
+                        <div><span id="upload-prompt" class="pull-right" style="display:none;color:red">上传中，请稍候！</span>上传图片/文件：<input id="filetoupload" type="file" name="filetoupload" multiple="true" style="width:200px;"></div>
+                        <script type="text/javascript" src="/static/js/jquery.upload-1.0.2.min.js"></script>
+                        <script type="text/javascript">
+                            $('#filetoupload').change(function() {
+                                $("#upload-prompt").text("上传中，请稍候！");
+                                $("#upload-prompt").show();
+                                if($(this).val()){
+                                    $(this).upload("/upload/", function(res) {
+                                        if(res.status == 200){
+                                            $("#upload-prompt").text(res.msg);
+                                            var con = document.getElementById("id_content").value;
+                                            document.getElementsByTagName('textarea')[0].focus();
+                                            document.getElementById("id_content").value = con+"\n"+res.url+"\n";
+                                            //$("#id-content").val(res.url);
+                                        }else{
+                                            alert(res.msg);
+                                        }
+                                    }, 'json');
+                                }
+                            });
+                        </script>
+                        <p><input class="btn btn-primary" type="submit" value="修改"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <div id="showcontent"></div>
+                    <p><strong>提示：</strong></p>
+                    <p>1、贴图片：可直接贴图片地址，如http://www.pujia8.com/static/img/focus2_2.jpg；也可直接上传图片，支持jpg|jpeg|gif|png格式的图片。</p>
+                    <p>2、传附件：直接上传即可，支持zip|rar|gz|7z|apk|ipa格式的文件。</p>
+                    <p>3、贴视频：可直接贴视频地址栏里的网址，如http://www.tudou.com/programs/view/PAH86KJNoiQ/ （支持土豆、优酷、B站、A站、七牛和乐视）。</p>
+                    <p>4、贴音频：直接帖音频的载点即可，支持mp3/wav/ogg格式，如http://www.pujia8.com/static/x-japan-hong.mp3。</p>
+                    <p>5、贴代码：使用[code]和[/code]括起来即可，如[code]print 'hello'[/code]</p>
+                    <p>6、加粗：使用[b]和[/b]括起来即可，如[b]加粗文字[/b]。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

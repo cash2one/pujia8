@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+    兑换码_扑家吧_扑家汉化平台_扑家汉化组
+{% endblock %}
+
+{% load gifts_tags %}
+{% load thumbnail %}
+
+{% block content %}
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>兑换码</h3>
+                </div>
+                <div id="gallery_show" class="modal-body">
+                    <p class="alert alert-success"><i class="icon-info-sign"></i>如果你的PP不足，请先获取PP，<a target="_blank" href="/topic/1896/">查看如何获取PP</a>。<br><i class="icon-info-sign"></i>抽中兑换码之后，可刷新本页面查看兑换码然后复制使用。</p>
+                    {% for gift in gifts %}
+                    <table id="gift{{ gift.id }}" class="post">
+                        <tbody>
+                            <tr>
+                                <td width="100" valign="top" style="text-align: center">
+                                    <p><a target="_blank" href="{{ gift.icon.url }}"><img src="{% thumbnail gift.icon 100x100 %}"></a></p>
+                                </td>
+                                <td width="10"></td>
+                                <td width="auto" valign="top">
+                                    <p>
+                                        <a href="{{ gift.url }}" target="_blank"><b>{{ gift.subject }}</b></a><br>
+                                        {{ gift.description|linebreaksbr }}<br>
+                                        耗费{{ gift.pp }}PP 概率{% gifts_rate gift.id %}% 剩余{% gifts_num gift.id %}个 已抽{{ gift.times }}次<br>
+                                        {% exchange_btn gift.id %}
+                                        <p id="exchange_info_{{ gift.id }}"></p>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+    <script type="text/javascript">
+        function exchange(id){
+            $.ajax({
+                url : "/gifts/exchange/"+id+"/",
+                type : "POST",
+                dataType: "json",
+                data : {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(json) {
+                    alert(json.msg);
+                },
+            });
+        }
+    </script>
+{% endblock %}

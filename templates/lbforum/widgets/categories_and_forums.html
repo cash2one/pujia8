@@ -1,0 +1,14 @@
+    <div class="modal-body">
+        {% for category in categories %}
+            <div style="float: left;">
+                <strong>{{ category }}</strong><br/>
+                <div style="float: left;">
+                    {% for forum in category.forum_set.all %}
+                        {% if forum.show_in_ui %}
+                        <a target="_blank" href="{% url 'lbforum_forum' forum.slug %}"><span class="badge badge-info">{{forum}}</span></a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>

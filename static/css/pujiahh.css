@@ -1,0 +1,23 @@
+.targetArea {
+  border:2px dotted #d9d9d9;
+  margin-left: 0px;
+  background:#f5f5f5;
+  margin-bottom: 10px;
+}
+.targetArea div[class *= "span"] {
+  margin: 5px 5px;
+}
+
+.targetArea .buttonArea {
+    display: none;
+    text-align: center;
+}
+.targetArea:hover .buttonArea {
+    display: inline;
+    text-align: center;
+}
+
+.remarktime {
+  text-align: right;
+}
+

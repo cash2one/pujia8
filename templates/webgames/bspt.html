@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>{% block title %}宝石与爬塔_扑家吧_扑家汉化平台_扑家汉化组，游戏玩家交友社区{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="{% block keywords %}汉化,扑家,扑家汉化组,扑家汉化平台{% endblock %}">
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <style>
+     .myiframe{box-sizing: border-box; }
+     .youxi1{height:100%;position:absolute;top:0;left:0;width:100%; z-index:9;margin-left:0; }
+    </style>
+</head>
+
+<body>
+    {% if uid %}
+    <div class="youxi1" id="youxi1">
+        <iframe id="game_if" class="myiframe" scrolling="no" width="100%" height="100%" frameborder="0" marginwidth="0" marginheight="0"
+                src="http://120.76.234.235:9015/ptx_pujiaba/PujiabaLogin?{{ args }}">
+        </iframe>
+    </div>
+    {% else %}
+        <p>请先<a href="/account/login/?next={{ request.path }}" title="登录"><font color="#FF0000">登录</font></a>。如果你还没有账号，请先<a href="/account/register/?next={{ request.path }}" title="注册"><font color="#FF0000">注册</font></a>。</p>
+        <img src="/static/upload/20160826091726_16.jpg" alt="宝石与爬塔" width="100%">
+    {% endif %}
+
+    <div style="display:none">
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3678643'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/stat.php%3Fid%3D3678643' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
+    <script>
+    // 计算页面的实际高度，iframe自适应会用到
+		var ifm= document.getElementById("youxi1");
+		ifm.style.height = document.documentElement.clientHeight +"px";
+	</script>
+</body>
+</html>
+

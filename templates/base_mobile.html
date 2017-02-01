@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>{% block title %}扑家吧_扑家汉化平台_扑家汉化组，游戏玩家交友社区{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="{% block keywords %}汉化,扑家,扑家汉化组,扑家汉化平台{% endblock %}">
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+    <link href="/static/css/bootstrap.css?v=1.50" rel="stylesheet">
+    {% block extra_ref %} {% endblock %}
+</head>
+
+<body{% if user.get_profile.background %} style="background-image: url(/static/{{ user.get_profile.background }});"{% endif %}>
+{% load lbforum_widget_tags %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">扑家吧</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li class="active"><a href="/">主页</a></li>
+                    <li><a target="_blank" href="/pujiagames/">联运</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">社区 <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>{% lbf_categories_and_forums %}</li>
+                        </ul>
+                    </li>
+                    <li><a target="_blank" href="http://projects.pujia8.com/">翻译系统</a></li>
+                    <li><a target="_blank" href="/library/">游戏库</a></li>
+                    <li><a target="_blank" href="/gallery/">后花园</a></li>
+                    <li><a target="_blank" href="/comment/hotlist/">超言弹</a></li>
+                    <li><a target="_blank" href="/gifts/">礼包</a></li>
+                    <li class="divider-vertical"></li>
+                    {% if user.is_authenticated %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username|slice:"8" }} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a target="_blank" href="/user/{{ user.id }}/">用户中心</a></li>
+                                <li><a target="_blank" href="/account/change/password/">更改密码</a></li>
+                                {% if user.is_staff %}
+                                    <li><a target="_blank" href="/admin/">管理</a></li>
+                                {% endif %}
+                                <li><a target="_blank" href="/payment/">打赏</a></li>
+                                {% if not user.get_profile.verify %}<li><a target="_blank" href="/topic/1105/">认证</a></li>{% endif %}
+                                <li><a href="/account/logout/">退出</a></li>
+                            </ul>
+                        </li>
+                        {% if user.get_profile.notification %}<li><a class="btn-primary" target="_blank" href="/user/{{ user.id }}/at/">{{ user.get_profile.notification }}条提醒</a></li>{% endif %}
+                    {% else %}
+                        <li><a href="/account/register/?next={{ request.path }}">注册</a></li>
+                        <li><a href="/account/login/?next={{ request.path }}">登录</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="nav pull-right">
+                    <li>
+                        <form class="navbar-search pull-left" action="/search/" method="get">
+                            <input type="text" class="search-query span2" placeholder="Search" name="w">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="container" class="container">
+    <div class="row">
+        <div class="span12">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<div style="display:none">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3678643'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/stat.php%3Fid%3D3678643' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script type="text/javascript" src="/static/js/pujia.js?v=2.00"></script>
+<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+</body>
+</html>

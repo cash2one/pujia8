@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+    超言弹_扑家吧_扑家汉化平台_扑家汉化组
+{% endblock %}
+
+{% block content %}
+{% load gravatar %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load comments_tags %}
+{% load pagination_tags %}
+<div class="row">
+    <div class="span8">
+        <div class="modal modal-fix">
+            <div class="modal-header">
+                <h3>超言弹：{{ comments|length}}发</h3>
+            </div>
+            <div  id="modal-body" class="modal-body">
+                {% autopaginate comments 30 %}
+                {% for comment in comments %}
+                <table id="c{{ comment.id }}" class="post">
+                    <tbody>
+                        <tr>
+                            <td class="avatar_td" valign="top">
+                                {% gravatar_for_user comment.name %}
+                            </td>
+                            <td width="auto" valign="top">
+                                <a href="/user/{{ comment.name_id }}/" target="_blank"><b>{{ comment.name }}</b></a>
+                                <small class="pull-right">
+                                    {{ comment.date|date:"Y-m-d H:i:s" }}
+                                </small>
+                                <p>{{ comment.content|pujia_text|safe }}</p>
+                                <small class="pull-right">
+                                    {% get_comment_target comment %}
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endfor %}
+                {% paginate %}
+            </div>
+        </div>
+    </div>
+    <div class="span4" id="rsbar">
+        {% include 'sidebar.html' %}
+    </div>
+</div>
+<script type="text/javascript" src="/static/js/jquery-ias.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        jQuery.ias({
+            container : '.span8 #modal-body',
+            item: '.post',
+            pagination: '#modal-body .pagination',
+            next: '.next-posts a',
+            loader: '<div style="text-align: center"><img src="/static/img/loader.gif"/></div>',
+            triggerPageTreshold: 99,
+            trigger: '<div style="text-align: center">载入更多</div>'
+        });
+    });
+</script>
+{% endblock %}

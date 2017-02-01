@@ -1,0 +1,39 @@
+﻿{% extends "base.html" %}
+
+{% block h1_title %}<a href="/">扑家汉化辅助系统</a>{% endblock %}
+{% block nav %}<a href="#">扑家汉化交流群：106634743</a>{% endblock %}
+
+{% block content %}
+<div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>扑家商城</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="span2" style="float: left; height: 260px; text-align: center; overflow: auto;">
+                            <div>
+                                <img height="150px" src="/static/screenshots/20131028151020_30.jpg.150x150_q85.jpg" alt="30天免回复卡">
+                                <p>30天免回复卡</p>
+                                <p>售价：200PP</p>
+                                <button id="buy_card" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">立即购买</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#buy_card').bind('click', function () {
+            if(confirm("为了你的PP着想，你确定要购买么？"))
+            {
+                $.get("/shop/no_replay_card/", function(res) {
+                alert(res.msg);
+                }, 'json');
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load gravatar %}
+{% load pagination_tags %}
+{% load comments_tags %}
+
+{% block title %}
+    扑家吧 - {% blocktrans %}{{ view_user }}'s profile{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tbody>
+                        <tr>
+                            <td width="80" valign="top" style="text-align: center">
+                                <p>{% gravatar_for_user view_user 80 %}</p>
+                                {% if user == view_user %}<p><a target="_blank" href="/account/change/avatar/">设置头像</a></p>{% endif %}
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                <p><strong>{{ view_user }}</strong> (uid: {{ view_user.id }})</p>
+                                <p>{% trans "Registered" %}: {{view_user.date_joined|date:"Y-m-d"}} {% trans "Last login" %}: {{view_user.last_login|date:"Y-m-d"}}</p>
+                                {% if user == view_user %}<p>注册邮箱: {{ view_user.email }}</p>{% endif %}
+                                <P><span>{% trans "Topics" %}: <a href="{% url 'lbforum_user_topics' view_user.pk %}">{{view_user.topic_set.all.count}}</a></span>
+                                <span>{% trans "Posts" %}: <a href="{% url 'lbforum_user_posts' view_user.pk %}">{{view_user.post_set.all.count}}</a></span> <span>收藏: <a href="{% url 'lbforum_user_favs' view_user.pk %}">{{ view_user.seed_set.all.count }}</a></span> <span>PP: <a href="/topic/1896/">{{ view_user.get_profile.pp }}</a></span> <span>GP: <a href="#">{{ view_user.get_profile.gp }}</a></span>
+                                </P>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% if hot_comments %}
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>超言弹：{{ hot_comments|length }}发</h3>
+                </div>
+                <div class="modal-body">
+                    {% autopaginate hot_comments 10 %}
+                    {% for comment in hot_comments %}
+                    <table id="c{{ comment.id }}" class="post">
+                        <tbody>
+                            <tr>
+                                <td width="48" valign="top" style="text-align: center">
+                                    {% gravatar_for_user comment.name %}
+                                </td>
+                                <td width="10"></td>
+                                <td width="auto" valign="top">
+                                    <a href="/user/{{ comment.name_id }}/" target="_blank"><b>{{ comment.name }}</b></a>
+                                    <small class="pull-right">
+                                        {{ comment.date|date:"Y-m-d H:i:s" }}
+                                    </small>
+                                    <p>{{ comment.content|pujia_text|safe }}</p>
+                                    <small class="pull-right">
+                                        {% get_comment_target comment %}
+                                    </small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% endfor %}
+                    {% paginate %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if user == view_user %}
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>个人小尾巴</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <p>什么是小尾巴？简单来说就是一句有性格的对白。</p>
+                        <p>在哪里展示小尾巴？签到的时候系统随机抽选展示，让你每天签到都有惊喜。</p>
+                        <p>好消息！现添加小尾巴每条只需10PP。</p>
+                        <p><textarea id="id_tail" class="input-xxlarge" rows="5" name="tail" maxlength="140"></textarea></p>
+                        <p>
+                            <form id="add_tail" enctype="multipart/form-data" method="POST">{% csrf_token %}
+                                <input id="add_tail_btn" type="submit" value="添加" name="submit_tail" class="btn btn-primary">
+                            </form>
+                        </p>
+                        <div id="add_tail_info"></div>
+                    </div>
+
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#add_tail_btn").click(function(e) {
+                                    var tail_string = $("#id_tail").val();
+                                    $.ajax({
+                                        url : "/tail/add/",
+                                        type : "POST",
+                                        dataType: "json",
+                                        data : {
+                                            client_response : tail_string,
+                                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                                            },
+                                            success : function(json) {
+                                                $("#add_tail_info").show();
+                                                $('#add_tail_info').text(json.msg);
+                                            },
+                                    });
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>更换背景</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <p>请选择图片上传，上传后可即时预览效果，但想保存背景设置的话需花费100PP。</p>
+                        <p>上传背景图片：<input id="filetoupload" type="file" name="filetoupload" style="width:200px;"></p>
+                        <p id="upload-prompt" style="display:none;color:red">上传中，请稍候！</p>
+                        <div id="upload-finish" style="display:none;">
+                            <p>上传完成，每次保存设置需花费100PP，是否要保存？</strong><p>
+                            <p>
+                            <form id="save" enctype="multipart/form-data" method="POST" url="">{% csrf_token %}
+                                <input id="save_btn" type="submit" value="保存" name="submit" class="btn btn-primary">
+                            </form>
+                            <p>
+                        </div>
+                        <div id="save_info"></div>
+                        <div>
+                            <form method="post" class="form-horizontal">{% csrf_token %}
+                                <p>设置前景透明度：请输入数值30～99。数值越小，越是透明——</p>
+                                <div class="control-group">
+                                    <div class="input-prepend">
+                                        <span class="add-on">透明度</span><input class="span1" id="opacity_value" size="2" type="text">
+                                    </div>
+                                    <button id="set_opacity" class="btn btn-primary">设置</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <script type="text/javascript" src="/static/js/jquery.upload-1.0.2.min.js"></script>
+                    <script type="text/javascript">
+                        $('#filetoupload').change(function() {
+                            $("#upload-finish").hide();
+                            $("#save_info").hide();
+                            $("#upload-prompt").show();
+                            if($(this).val()){
+                                $(this).upload("/account/change/background/", function(res) {
+                                    if(res.status == 200){
+                                        $("#upload-finish").show();
+                                        $("#upload-prompt").hide();
+                                        $("#save").attr("url", "/account/change/background/save/?fn="+res.url);
+                                        $("body").attr("style", "background-image: url("+res.url+");")
+                                    }else{
+                                        alert(res.msg);
+                                    }
+                                }, 'json');
+                            }
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#save_btn").click(function(e) {
+                                    var url_string = $("#save").attr("url");
+                                    $.ajax({
+                                        url : url_string,
+                                        type : "POST",
+                                        dataType: "json",
+                                        data : {
+                                            client_response : url_string,
+                                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                                            },
+                                            success : function(json) {
+                                                $("#save_info").show();
+                                                $('#save_info').text(json.msg);
+                                            },
+                                    });
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                            });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#set_opacity").click(function(e) {
+                                var exp = new Date();
+                                exp.setTime(exp.getTime() + 60000*24*60*60*1000);
+                                var opacity_value = $("#opacity_value").val();
+                                document.cookie = 'opacity_value=' + opacity_value + ";path=/" + ";expires=" + exp.toGMTString();
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>个人介绍</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <p>在这里写下你的介绍吧，140字以内，保存需花费100PP。（保存后在回帖里把鼠标放头像上即可看到）</p>
+                        <p><textarea id="id_introduce" class="input-xxlarge" rows="5" name="introduce" maxlength="140"></textarea></p>
+                        <p>
+                            <form id="save_introduce" enctype="multipart/form-data" method="POST">{% csrf_token %}
+                                <input id="save_introduce_btn" type="submit" value="保存" name="submit" class="btn btn-primary">
+                            </form>
+                        </p>
+                        <div id="save_introduce_info"></div>
+                    </div>
+
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#save_introduce_btn").click(function(e) {
+                                    var introduce_string = $("#id_introduce").val();
+                                    $.ajax({
+                                        url : "/account/change/introduce/",
+                                        type : "POST",
+                                        dataType: "json",
+                                        data : {
+                                            client_response : introduce_string,
+                                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                                            },
+                                            success : function(json) {
+                                                $("#save_introduce_info").show();
+                                                $('#save_introduce_info').text(json.msg);
+                                            },
+                                    });
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+            {% endif %}
+{% endblock %}

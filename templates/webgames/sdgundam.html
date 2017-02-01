@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load comments_tags %}
+{% load flatpages %}
+
+{% block title %}
+    SD敢达先驱的荣耀_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    {% get_flatpages '/wg_sdgundam/' as wg_sdgundam_pages %}{% for wg_sdgundam in wg_sdgundam_pages %}{{ wg_sdgundam.content|safe }}{% endfor %}
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active"><a href="#game_play" data-toggle="tab"><strong>进行游戏</strong></a></li>
+                        <li class=""><a href="#game_gospel" data-toggle="tab"><strong>游戏说明</strong></a></li>
+                        <li class=""><a href="#game_review" data-toggle="tab"><strong>游戏评测</strong></a></li>
+                    </ul>
+                    <div id="GameTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="game_play">
+                            {% if user.is_authenticated %}
+                            <div>
+                                <iframe id="gameiframe" frameborder=0 width="1024px" height="600px" src="http://sdgundam.pujia8.com/lypage/game.aspx?{{ args }}"></iframe>
+                                <p><a class="btn btn-primary" onclick="fullscreen(1);">全屏游戏</a></p>
+                            </div>
+                            {% else %}
+                            <p>请先<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>。如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+                            <img src="/static/upload/20160315153808_23.jpg" alt="SD敢达先驱的荣耀" width="639" height="614">
+                            {% endif %}
+                        </div>
+
+                        <div class="tab-pane fade" id="game_review">
+                            <div><p class="">首款正版敢达类放置挂机网页游戏《SD敢达先驱的荣耀》已正式上线，一款无需操作的放置类敢达相关游戏，一款适合在工作之余休闲一把的敢达相关游戏，一款适合在摸鱼的同时又能打法时间的敢达相关游戏，总而言之，这是一款奉献给敢达粉丝的游戏。
+<br>
+<br><img src="/static/upload/20160314224745_65.jpg" alt="">
+<br>
+<br>说了一大串，应该最大的问题还是在于，一款敢达题材的游戏，为何游戏类型是放置类，每个敢达粉丝应该多少接触过一些敢达题材的热门游戏，无论在哪个平台上，都有着数量相当的敢达题材游戏，就以大家熟知的网游为例，就有着SD敢达OL以及机动战士敢达OL两款大作，除此之外在掌机乃至于主机平台还有着诸如敢达VS系列，G世纪系列，敢达战记之类的一线热门大作。
+<br>
+<br>但是，在此之前无论哪一款敢达游戏，都与玩家操作密切相关，所以说，这款放置类敢达游戏究竟是什么情况呢，就继续往下看吧。
+<br>
+<br><strong>画面画风 依然是那个熟悉的SD比例 一切依旧</strong>
+<br>
+<br>说到一款游戏就不得不提游戏实际画面，毕竟画面是一个游戏门面，一款游戏是否能抓住玩家的心，权看画面给玩家的第一印象。
+<br>
+<br>SD敢达大作战的画面，或者说是画风，其余对于SD敢达G世纪，或者超级机器人大战的铁杆粉丝来说，还是很容易接受的，作为一款适合摸鱼消遣的网页游戏，或许平面2D的画面加上经典的SD比例是最为合适的。
+<br>
+<br><img src="/static/upload/20160314224828_52.jpg" alt="">
+<br>
+<br><strong>战斗操控 放置型玩法所带来的，不会只是无聊</strong>
+<br>
+<br>什么是放置类游戏？放置类游戏，顾名思义，是一种只需要把游戏放在那里，游戏就会根据系统的一系列运算规则自动运行并得到游戏结果的游戏类型。
+<br>
+<br>SD敢达大作战也是如此，机体的等级升级以及相关金钱获得都可以通过挂机放置来获得，简单来说就是，玩家无需大费周章的将时间浪费在机体升级以及金钱的获取之上，玩家所需要进行的仅仅是游戏剧情的推动以及选择参战机体等基础操作，在整个游戏进程中，放置的过程是多于操作的。
+<br>
+<br>当然，玩家的操作也不会是单纯而无聊的，因为，我们每个人，都是好胜的，放置是游戏的过程，但是，这只是最为简单最为基础的一个过程。
+<br>
+<br><img src="/static/upload/20160314224849_95.jpg" alt="">
+<br>
+<br><strong>剧情模式 忠实还原动画剧情，一切都是你所熟知的</strong>
+<br>
+<br>作为一款放置游戏，肯定存在其相关的主线剧情，而这主线剧情，就是广大玩家最为熟悉的敢达系列，剧情模式的众多关卡为我们重现了敢达中的各种历史性事件以及战役，而这一切，都交由玩家自己去推动以及发展。
+<br>
+<br><img src="/static/upload/20160314224916_91.jpg" alt="">
+<br>
+<br><strong>竞技场模式 谁强谁弱，战力才是关键</strong>
+<br>
+<br>除去剧情模式，SD敢达大作战还准备了竞技场模式，也就是所谓的PVP，在竞技场中，玩家可以和其他玩家同台竞技，在竞技过程中，玩家需要选择自己的机体配置，正确的搭配加上恰大好处的运气就可以带来胜利。
+<br>
+<br><img src="/static/upload/20160314224939_32.jpg" alt="">
+<br>
+<br><strong>参战机体 只会多 不会少</strong>
+<br>
+<br>或许，对于一款敢达游戏，每个玩家都最关心的话题就是参战作品以及参战机体的数量了，游戏本身目前所参战的作品主要是已经动画化的各类作品，除此之外还有热门小说以及漫画作品，比如闪光的哈撒韦，比如苍蓝命运，首批参战机体数量可观，后续也会不断更新追加机体，当然了，对于小编来说，更加希望能加入AGE,G复兴以及热播的铁血孤儿等最新作品，至于是否会加入，小编也就不清楚了，不过一切皆有可能。
+<br>
+<br><img src="/static/upload/20160314225006_62.jpg" alt="">
+<br>
+<br><strong>结语 一款出乎意料的作品</strong>
+<br>
+<br>对于小编来说，SD敢达大作战是一款出人意料的小游戏，与其他网游佳作，3A大作相比，这款游戏未必出彩，但是其独特的玩法以及适宜的游戏节奏却能带给玩家一种别样的游戏体验。</p></div>
+                        </div>
+                        <div class="tab-pane fade" id="game_gospel">
+                            <div><p class=""><strong>游戏界面</strong>
+<br><img src="/static/upload/20160314233053_27.jpg" alt="">
+<br>
+<br><strong>积分赛</strong>
+<br>
+<br>开启条件：玩家总战力达到 150000 后，即可免费开启积分赛系统。
+<br>玩家可以在积分赛中与全服玩家进行挑战，争夺排名。参与积分赛需要消耗 BP 点，每进行一次战斗就会消耗 1 点 BP，初始 BP 总共 5 点，BP 会自动恢复（30 分钟恢复 1 点）亦可通过购买 BP 罐进行恢复，商城中的 BP 上限扩充可增加玩家在积分赛中的 BP 点数上限，不过要注意的是即使购买了 BP 上限扩充道具后每天积分赛开启时的基础 BP 还是 5 点哦。
+<br>
+<br><img src="/static/upload/20160314233201_51.jpg" alt=""> <img src="/static/upload/20160314233201_95.jpg" alt="">
+<br>
+<br>积分赛每天 22:00 会关闭并进行结算，第二天 8：00 会再次重新开启。根据玩家每日、每赛季在积分赛中的表现，可以获得 BP 罐、白金券、皇牌机师作战记录、扭蛋券等道具奖励，其中白金券可以用来兑换各星级机师。
+<br>
+<br><strong>机师系统</strong>
+<br>
+<br>玩家点击游戏界面底部的“机师”进入机师库，可以查看自己拥有的机师列表，并进行机师排序、一键搭乘、解雇机师等操作。
+<br>
+<br>一键搭乘：玩家现有机师将自动搭乘已出战机体和适配机体。
+<br><img src="/static/upload/20160314233320_47.jpg" alt="">
+<br>
+<br>解雇机师：单击未搭乘机师，可以选择解雇机师获取机师请求书，用来在 AE 中招募新机师。
+<br><img src="/static/upload/20160314233340_59.jpg" alt="">
+<br>
+<br><strong>图鉴系统</strong>
+<br><img src="/static/upload/20160314233452_0.jpg" alt="">
+<br>
+<br>图鉴系统里可以收集管理机体图鉴，对机体进行合金改造、合成机体、改造机体设计图，让玩家拥有的机体更加强大。
+<br>
+<br>开启条件：玩家每获得一个新机体，就会得到该机体的图鉴，收集到 50 个图鉴后即可开启图鉴功能。
+<br>
+<br><img src="/static/upload/20160314233527_36.jpg" alt="">
+<br>合成功能：玩家可以使用指定材料研制任意机体设计图，并利用设计图和机体碎片合成对应机体。
+<br>
+<br><img src="/static/upload/20160314233557_79.jpg" alt="">
+<br>设计图改造：玩家可以使用机体设计图和机体碎片对相应机体进行设计图改造，以使该机体获得出战特殊效果。
+<br>
+<br><img src="/static/upload/20160314233629_95.jpg" alt="">
+<br>合金改造：玩家可以使用指定材料对相应机体进行合金改造，以使主角机得到战力和属性加成。
+<br>
+<br><strong>仓库功能</strong>
+<br><img src="/static/upload/20160314233730_41.jpg" alt="">
+<br>仓库中存放着通过战场发现、好友赠送等途径获得的道具，玩家可以通过点击直接使用仓库中的普通道具，也可以在仓库右侧中查看自己所拥有的特殊道具数量。其中，玩家可以通过右下角“一键GP”一键出售所有 GP 道具，“一键EXP”一键使用所有 Exp 道具。
+<br>
+<br>如果仓库容量不够用，玩家可以点击仓库上方的“升级仓库”，消耗相应的材料（探索模式获取），即可增加仓库容量。
+<br>
+<br><strong>继承功能</strong>
+<br><img src="/static/upload/20160314233818_41.jpg" alt="">
+<br>玩家可以通过继承功能将机体战斗资料进行转移。玩家需要消耗一定数量的钻石，将一台机体的所有经验、等级、强化程度、进阶等级全部转移到另一台机体上。（注：战斗资料转移后，输出机体变为 1 级初始状态）
+<br>
+<br><strong>商会功能</strong>
+<br><img src="/static/upload/20160314233911_70.jpg" alt="">
+<br>开启条件：玩家须持有 50000000GP 方可开启（免费）。
+<br>玩家可以在商会中上交材料完成订单以获得奖励，完成所有订单后还可获得额外奖励。商会订单每隔一定时间会进行刷新，玩家也可以花费 40 钻石进行刷新。
+<br>
+<br><strong>AE 系统</strong>
+<br><img src="/static/upload/20160314233955_65.jpg" alt="">
+<br>开启条件：玩家须持有 100 机体碎片方可开启（免费）。玩家可以通过分解机体获得机体碎片，通过解雇机师获得机师请求书。
+<br>
+<br>AE 中每天将提供 4 个二~五星的机师、4 台四星机体以及 4 台五、六星机体
+<br>
+<br><strong>好友系统</strong>
+<br><img src="/static/upload/20160314234047_26.jpg" alt="">
+<br>玩家可以在好友系统中添加、删除好友以及查看好友出战编队，并进行收取、赠送礼物等操作。
+<br>
+<br>玩家可以向好友赠送探索燃料、体力、GP 和资源包等礼物。每天送礼次数为 10 次，可以通过邀请好友来增加送礼次数。
+<br>
+<br><strong>昆曼沙</strong>
+<br><img src="/static/upload/20160314234118_79.jpg" alt="">
+<br>探索模式中，从距离白色基地 30 单位左右开始，玩家在探索过程中遭遇昆曼沙。每出现一个昆曼沙，每次探索都将额外消耗 1 点探索燃料，且每次击退昆曼沙，他都会变得越来越强。当玩家击退昆曼沙后，可以获得经验、材料、扭蛋券等奖励。
+<br><img src="/static/upload/20160314234202_40.jpg" alt="">
+<br>
+<br><strong>白色基地</strong>
+<br><img src="/static/upload/20160314234226_65.jpg" alt="">
+<br>开启条件：探索能力等级达到 4（通过战役 1-40 格利普斯 2）。
+<br>玩家开启白色基地后，将可以花费探索燃料自动探索资源。根据其当前探索到的最深距离，玩家可以部署不同级别的自动探索任务，并在完成后一键收取。玩家初始拥有一条自动探索任务队列，可花费机体碎片增加队列，提高探索效率。</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span8">
+            <div id="comments">
+                <div id="quick_reply" class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发射言弹</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_comments_list for args as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+
+        </div>
+        <div class="span4">
+            {% get_hot_comments_list for args as comments %}
+            {% include 'pujia_comments/show_hot_comments.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <img src="/static/upload/sdgundam_footerimg.png" alt="">
+    <script type="text/javascript" charset="utf-8">
+        document.getElementsByTagName("body")[0].setAttribute("style","background-image: url(/static/background/20160315003612_67.jpg);")
+    </script>
+{% endblock %}

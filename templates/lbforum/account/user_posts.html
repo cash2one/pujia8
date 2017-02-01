@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load lbforum_widget_tags %}
+{% load pagination_tags %}
+{% load gravatar %}
+
+{% block title %}{{  block.super }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tbody>
+                        <tr>
+                            <td width="80" valign="top" style="text-align: center">
+                                <p>{% gravatar_for_user view_user 80 %}</p>
+                                <p><a target="_blank" href="/account/change/avatar/">设置头像</a></p>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                <p><strong>{{ view_user }}</strong> (uid: {{ view_user.id }})</p>
+                                <p>{% trans "Registered" %}: {{view_user.date_joined|date:"Y-m-d"}} {% trans "Last login" %}: {{view_user.last_login|date:"Y-m-d"}}</p>
+                                {% if user == view_user %}<p>注册邮箱: {{ view_user.email }}</p>{% endif %}
+                                <P><span>{% trans "Topics" %}: <a href="{% url 'lbforum_user_topics' view_user.pk %}">{{view_user.topic_set.all.count}}</a></span>
+                                <span>{% trans "Posts" %}: <a href="{% url 'lbforum_user_posts' view_user.pk %}">{{view_user.post_set.all.count}}</a></span> <span>收藏: <a href="{% url 'lbforum_user_favs' view_user.pk %}">{{ view_user.seed_set.all.count }}</a></span> <span>PP: <a href="/topic/1896/">{{ view_user.get_profile.pp }}</a></span>
+                                </P>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal modal-fix">
+                {% autopaginate posts 15 %}
+                <div class="modal-header">
+                    <h3>{{ view_user }}的回复列表</h3>
+                </div>
+                <div id="modal-body" class="modal-body">
+                    {% for post in posts %}
+                <table class="post">
+                    <tbody><tr>
+                            <td width="auto" valign="top">
+                                <small class="pull-right">#{% page_item_idx page_obj forloop %} - {{ post.created_on|date:"Y-m-d H:i:s" }}</small>
+                                <strong>
+                                    <a target="_blank" href="{{ post.get_absolute_url }}">{{ post.subject }}</a>
+                                </strong>
+                                <p>{% if post.secret and post.posted_by != user and post.topic.posted_by != user %}<div class="alert">此帖仅作者可见，非请勿视！</div>{% else %}{{ post.message|pujia_text|safe }}{% endif %}</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+					{% endfor %}
+					{% paginate %}
+                </div>
+            </div>
+        </div>
+
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+
+{% endblock %}

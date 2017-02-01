@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+    游戏库_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}{% load thumbnail %}
+    <header class="jumbotron subhead" id="overview">
+        <div class="subnav">
+            <ul class="nav nav-pills">
+                <li><a href="/library/">全部</a></li>
+                <li><a href="/library/category/android/">Android</a></li>
+                <li><a href="/library/category/ios/">iOS</a></li>
+                <li><a href="/library/category/psv/">PSV</a></li>
+                <li><a href="/library/category/3ds/">3DS</a></li>
+                <li><a href="/library/category/psp/">PSP</a></li>
+                <li><a href="/library/category/nds/">NDS</a></li>
+                <li><a href="/library/category/pc/">PC</a></li>
+                <li><a href="/library/category/wii/">WII</a></li>
+                <li><a href="/library/category/ps3/">PS3</a></li>
+                <li><a href="/library/category/ps2/">PS2</a></li>
+                <li><a href="/library/category/gba/">GBA</a></li>
+                <li><a href="/library/category/etc/">ETC</a></li>
+                <span class="pull-right" style="margin-top: 5px; margin-right: 5px;">
+                    {{ languageform.game_language }}
+                    {{ stateform.games_state }}
+                    {{ orderform.games_order_by }}
+                </span>
+            </ul>
+
+        </div>
+    </header>
+
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>游戏库（{{ games|length }}款）
+                    </h3>
+                </div>
+                {% include 'games/games_list_show.html' %}
+            </div>
+        </div>
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% endblock %}

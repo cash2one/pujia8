@@ -1,0 +1,19 @@
+{% load game_tags %}
+{% load thumbnail %}
+
+{% for collection in collection_list %}
+<div class="modal modal-fix">
+    <div class="modal-header">
+        <h3><a target="_blank" href="/library/">{{ collection.title }}</a></h3>
+    </div>
+    <div class="modal-body">
+        {% get_games_list for collection.game_id as games %}
+        {% include 'games/widgets/collection_games.html' %}
+    </div>
+    {% if collection.description %}
+    <div class="modal-footer" style="text-align: left;">
+        {{ collection.description }}
+    </div>
+    {% endif %}
+</div>
+{% endfor %}

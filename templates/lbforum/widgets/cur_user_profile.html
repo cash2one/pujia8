@@ -1,0 +1,45 @@
+            <div class="modal modal-fix" id="pujia_good">
+                <div class="modal-header">
+                    <h3>扑家官方
+                        {% if user.is_authenticated %}
+                        <span class="pull-right">
+                            <a href="#" rel="popover" data-placement="left" data-content="你已连续签到{{ user.get_profile.check_in }}天，共签到{{ user.get_profile.check_in_total }}天。" data-original-title="签到信息">
+                            {% if cic %}
+                                <button id="check_in" class="btn btn-inverse dropdown-toggle">已签</button>
+                            {% else %}
+                                <button id="check_in" class="btn btn-primary dropdown-toggle">签到</button>
+                            {% endif %}
+                            </a>
+                        </span>
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="dl-good-list clearfix">
+                        <div class="good-first">
+                            <a href="/link/44/" title="安卓客户端" class="good-link" target="_blank"><img src="/static/img/android_app.png" alt="安卓客户端"><span>客户端</span>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="http://weibo.com/pujiahh" title="新浪微博" class="good-link" target="_blank"><img src="/static/img/sina_weibo.png" alt="新浪微博"><span>新浪微博</span>
+                            </a>
+                        </div>
+                        <div class="good-last">
+                            <a href="#" class="good-link" rel="popover" data-placement="left" data-content="扑家微信号：pujiaba" data-original-title="关注"><img src="/static/img/tx_weixin.png" alt="微信"><span>微信</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if not cic %}
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#check_in').bind('click', function () {
+                        $.post("/checkin/", function(res) {
+                        alert(res.msg);
+                        }, 'json');
+                    });
+                });
+            </script>
+            {% endif %}
+

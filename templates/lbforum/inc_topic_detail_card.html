@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load gravatar %}
+
+<div class="modal modal-fix">
+    {% if forloop.counter == 1 %}
+    <div class="modal-header">
+        <h3>主题列表
+            <span id="forum_order_by" class="pull-right">
+                {{ form.order_by }}
+            </span>
+        </h3>
+    </div>
+    {% endif %}
+    <div class="modal-body">
+        <table>
+            <tbody>
+            <tr>
+                <td width="64" valign="top" style="text-align: center">
+                    <a class="dark" href="{% url 'lbforum_user_profile' t.posted_by.pk %}">{% gravatar_for_user t.posted_by %}</a>
+                </td>
+                <td width="auto" valign="top">
+                    <div class="card_content">
+                        <span><strong>{% if t.topic_type %}[{{ t.topic_type }}]{% endif %}<a target="_blank" href="{{ t.get_absolute_url }}">{% if t.level >= 60 %}<font color="#FF0000">{{t.subject}}</font>{% else %}{{t.subject}}{% endif %}</a></strong></span>
+                        <span>{{ t.post.message|slice:"140" }}</span>
+                        <span><small><a href="{% url 'lbforum_user_profile' t.posted_by.pk %}">{{t.posted_by.username}}</a> 更新于 {{ t.get_last_post.update|lbtimesince }}</small></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer card_footer">
+        <div class="card-footer-list clearfix">
+            <div class="good-first">
+                <a href="{% url 'lbforum_forum' t.forum.slug %}"><small>{{t.forum.name}}</small></a>
+            </div>
+            <div>
+                <small>{% trans "views" %} {{ t.num_views }}</small>
+            </div>
+            <div class="good-last">
+                <a target="_blank" href="{% url 'lbforum_topic' t.id %}?page={% page_info t.num_replies %}#comments"><small>评论 {{ t.num_replies|add:"-1"}}</small></a>
+            </div>
+        </div>
+    </div>
+</div>

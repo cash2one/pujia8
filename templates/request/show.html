@@ -1,0 +1,96 @@
+﻿{% extends "base.html" %}
+
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load lbforum_widget_tags %}
+{% load flatpages %}
+{% load gravatar %}
+{% load comments_tags %}
+
+{% block title %}{{ RequestGame.title }}汉化请愿_扑家汉化辅助系统_扑家汉化组{% endblock %}
+
+{% block content %}{% load thumbnail %}
+    <ul class="breadcrumb">
+        <li><a href="/">首页</a> <span class="divider">/</span></li>
+        <a href="/request/">汉化请愿</a> <span class="divider">/</span></li>
+        <li class="active">{{ RequestGame.title }}</li>
+    </ul>
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>{{ RequestGame.title }}汉化请愿<span class="pull-right">{% gravatar_for_user RequestGame.name %}</span></h3>
+                    <small>作者：{{ RequestGame.name }} 时间：{{ RequestGame.add_time|date:"Y-m-d" }} <a target="_blank" href="/request/send/">我要请愿</a></small>
+                </div>
+                <div class="modal-body">
+                    {% include 'ad740.html' %}
+
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 20px">
+                        <tbody>
+                        <tr>
+                            <td width="180" valign="top" style="text-align: center">
+                                <a href="{{ RequestGame.gamepack.url }}">    <img src="{% thumbnail RequestGame.gamepack 250x250 %}" alt="{{ RequestGame.title }}"></a>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                <p>游戏名称：{{ RequestGame.title }}</p>
+                                <p>游戏平台：{{ RequestGame.get_category_display }}</p>
+                                <p>发售日期：{{ RequestGame.publish_time|date:'Y-m-d' }}</p>
+                                <p>游戏类型：{{ RequestGame.game_type }}</p>
+                                <p>下载地址：<a target="_blank" href="{{ RequestGame.download_link }}">点击下载</a></p>
+                                <script type="text/javascript" charset="utf-8">
+                                    (function(){
+                                        var _w = 142 , _h = 32;
+                                        var param = {
+                                            url:location.href,
+                                            type:'4',
+                                            count:'', /**是否显示分享数，1显示(可选)*/
+                                            appkey:'912885643', /**您申请的应用appkey,显示分享来源(可选)*/
+                                            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+                                            pic:'http://www.pujia8.com/static/{{ project.imagefile }}', /**分享图片的路径(可选)*/
+                                            ralateUid:'2375605947', /**关联用户的UID，分享微博会@该用户(可选)*/
+                                            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+                                            rnd:new Date().valueOf()
+                                        }
+                                        var temp = [];
+                                        for( var p in param ){
+                                            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                                        }
+                                        document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+                                    })()
+                                </script>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p><strong>游戏介绍</strong>：{{ RequestGame.introduce|escape|urlize|linebreaks }}</p>
+                    <p><strong>请愿说明</strong>：{{ RequestGame.caption|escape|urlize|linebreaks }}</p>
+                    <p><strong>群众表示</strong>：<br><a href="./up/">庐山升龙霸</a><i>({{ RequestGame.up }})</i><br>
+                        <a href="./down/">打入十八层地狱</a><i>({{ RequestGame.down }})</i></p>
+                </div>
+            </div>
+            {% get_flatpages '/ADdetail/' as ad_detail_pages %}{% for ad_detail in ad_detail_pages %}{{ ad_detail.content|safe }}{% endfor %}
+
+            <div id="comments">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发表评论</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_hot_comments_list for RequestGame as comments %}
+            {% include 'pujia_comments/show_hot_comments.html' %}
+
+            {% get_comments_list for RequestGame as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+        </div>
+
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% endblock %}

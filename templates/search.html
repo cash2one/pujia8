@@ -1,0 +1,69 @@
+﻿{% extends "base.html" %}
+
+{% load pagination_tags %}
+
+{% block title %}扑家汉化平台_扑家汉化组{% endblock %}
+
+{% block content %}{% load thumbnail %}
+<pre>
+<i class="icon-list-alt"></i>搜索"{{ word }}"结果
+</pre>
+
+    {% if games %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>汉化游戏</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in games %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if topics %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>社区主题</h3>
+                    </div>
+                    <div class="modal-body">
+							{% for t in topics %}
+							{% include 'lbforum/inc_topic_detail.html' %}
+							{% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if requests %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>汉化请愿</h3>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-list">
+                            {% for request in requests %}
+                                <li><p><a target="_blank" href="/request/{{ request.id }}/">[{{ request.get_category_display }}]{{ request.title }}[{{ request.up }}:{{ request.down }}]</a></p></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

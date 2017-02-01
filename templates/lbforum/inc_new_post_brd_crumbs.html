@@ -1,0 +1,7 @@
+{% load i18n %}
+<ul class="breadcrumb">
+    <li><a href="/">扑家吧</a> <span class="divider">/</span></li>
+    <li><a href="{{ forum.get_absolute_url }}">{{ forum.name }}</a> <span class="divider">/</span></li>
+    <li><a href="{{ topic.get_absolute_url }}">{{ topic.subject }}</a> <span class="divider">/</span></li>
+    <li class="active">{% if is_new_post %}{% trans "Post new" %}{% else %}{% trans "Edit" %}{% endif %} {{ post_type }}</li>
+</ul>

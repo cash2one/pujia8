@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+    充值 | 扑家吧
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>打赏</h3>
+                </div>
+                <div class="modal-body">
+                    <p>如果您喜欢本扑家平台或者喜欢我们的汉化游戏，欢迎打赏我们，以便我们能进一步发展。<br>每打赏1元可获得20PP奖励。</p>
+                    <a href="{%url "payment_upgrade_plans" '1'%}"><span class="label label-info">1元</span></a> <a href="{%url "payment_upgrade_plans" '5'%}"><span class="label label-info">5元</span></a> <a href="{%url "payment_upgrade_plans" '10'%}"><span class="label label-info">10元</span></a> <a href="{%url "payment_upgrade_plans" '20'%}"><span class="label label-info">20元</span></a> <a href="{%url "payment_upgrade_plans" '50'%}"><span class="label label-info">50元</span></a> <a href="{%url "payment_upgrade_plans" '100'%}"><span class="label label-info">100元</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

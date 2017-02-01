@@ -1,0 +1,30 @@
+{% if comments %}
+{% load gravatar %}
+{% load pagination_tags %}
+{% autopaginate comments 15 %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+    <div class="modal modal-fix">
+        <div class="modal-header">
+            <h3>{{ comments_count }}条评论</h3>
+        </div>
+        <div class="modal-body">
+            {% for comment in comments %}
+                <table class="post">
+                    <tbody>
+                    <tr>
+                        <td width="48" valign="top" style="text-align: center">
+                            {% gravatar_for_user comment.user %}
+                        </td>
+                        <td width="10"></td>
+                        <td width="auto" valign="top">
+                            <a href="/user/{{ comment.user.id }}/" target="_blank">{{ comment.user_name }}</a><small class="pull-right">#{{ forloop.counter }} - {{ comment.submit_date|date:"Y-m-d H:i:s" }} </small>
+                            <p>{{ comment.comment|pujia_text|safe }}</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

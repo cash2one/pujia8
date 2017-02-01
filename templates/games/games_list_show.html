@@ -1,0 +1,9 @@
+                        {% load pagination_tags %}{% autopaginate games 55 %}{% load thumbnail %}{% load game_tags %}
+                        <div id="modal-body" class="modal-body">
+                            {% for game in games %}
+                                {% include 'games/game_crumbs.html' %}
+                            {% endfor %}
+                        </div>
+                        <div id="modal-footer" class="modal-footer">
+                            {% paginate %}
+                        </div>

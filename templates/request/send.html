@@ -1,0 +1,22 @@
+﻿{% extends "base.html" %}
+
+{% block title %}汉化请愿_扑家汉化辅助系统_扑家汉化组{% endblock %}
+{% block h1_title %}汉化请愿{% endblock %}
+{% block nav %}提出您的交配申请{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                        <table>
+                            {{ form.as_table }}
+                        </table>
+                        <p><input class="btn btn-primary" type="submit" value="发出请愿"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ flatpage.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>扑家联运</h3>
+                </div>
+                <div id="game_list" class="modal-body">
+                    {{ flatpage.content|safe }}
+                </div>
+            </div>
+        </div>
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% endblock %}

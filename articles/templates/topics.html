@@ -1,0 +1,40 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+    <pre>共{{ teachings|length }}篇主题<button class="btn btn-primary pull-right" onclick="location.href='/articles/submit/topic/'">发表主题</button>
+    </pre>
+    {% load pagination_tags %}{% autopaginate teachings 30 %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal" style="position: relative; width: 100%; top: auto; left: auto; margin: 0 auto; margin-bottom: 30px; z-index: 1">
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>平台</th>
+                            <th>分类</th>
+                            <th>主题</th>
+                            <th>浏览数</th>
+                            <th>作者</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for teaching in teachings %}
+                            <tr>
+                                <td width="5%">{{ teaching.get_category_display }}</td>
+                                <td width="10%">{{ teaching.get_category2_display }}</td>
+                                <td width="60%"><a target="_blank" title="{{ teaching.title }}" href="/articles/{{ teaching.id }}/">{{ teaching.title }}</td>
+                                <td width="10%">{{ teaching.count }}</td>
+                                <td width="15%">{{ teaching.name }}<br>{{ teaching.time|date:"Y-m-d" }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {% paginate %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

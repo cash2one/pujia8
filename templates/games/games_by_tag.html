@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+    游戏库_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}
+    <header class="jumbotron subhead" id="overview">
+        <div class="subnav">
+            <ul class="nav nav-pills">
+                <li><a href="/library/all/tag/{{ game_tag }}/">全部</a></li>
+
+                <li><a href="/library/android/tag/{{ game_tag }}/">Android</a></li>
+                <li><a href="/library/ios/tag/{{ game_tag }}/">iOS</a></li>
+                <li><a href="/library/psv/tag/{{ game_tag }}/">PSV</a></li>
+                <li><a href="/library/3ds/tag/{{ game_tag }}/">3DS</a></li>
+                <li><a href="/library/psp/tag/{{ game_tag }}/">PSP</a></li>
+                <li><a href="/library/nds/tag/{{ game_tag }}/">NDS</a></li>
+                <li><a href="/library/pc/tag/{{ game_tag }}/">PC</a></li>
+                <li><a href="/library/wii/tag/{{ game_tag }}/">WII</a></li>
+                <li><a href="/library/ps3/tag/{{ game_tag }}/">PS3</a></li>
+                <li><a href="/library/ps2/tag/{{ game_tag }}/">PS2</a></li>
+                <li><a href="/library/gba/tag/{{ game_tag }}/">GBA</a></li>
+                <li><a href="/library/etc/tag/{{ game_tag }}/">ETC</a></li>
+                <span class="pull-right" style="margin-top: 5px; margin-right: 5px;">
+                    {{ languageform.game_language }}
+                    {{ stateform.games_state }}
+                    {{ orderform.games_order_by }}
+                </span>
+            </ul>
+
+        </div>
+    </header>
+
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>标签为“{{ game_tag }}”的{{ platform }}游戏（共{{ games|length }}款）
+                    </h3>
+                </div>
+                {% include 'games/games_list_show.html' %}
+            </div>
+        </div>
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+
+{% endblock %}

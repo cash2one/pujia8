@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+
+{% block title %}{{  block.super }}{% endblock %}
+
+{% block content %}
+    {% include 'lbforum/inc_new_post_brd_crumbs.html' %}
+    <div class="row">
+        <div class="span7">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    {% if form.errors %}
+                        <div class="ct-box error-box" id="req-msg">
+                            <p class="errornote"> {% trans "Please correct the errors below." %}  </p>
+                            {{ form|form_all_error }}
+                        </div>
+                    {% endif %}
+                    <form action="" accept-charset="utf-8" method="post" id="afocus">
+                        <div class="hidden" id="hidden_fields">
+                            {% csrf_token %}
+                        </div>
+                        {% if topic_post %}
+                            {{ form.topic_type }} {{ form.subject }}
+                        {% endif %}
+                        <p> {{ form.message }}</p>
+                        <div><span id="upload-prompt" class="pull-right" style="display:none;color:red">上传中，请稍候！</span>上传图片/文件：<input id="filetoupload" type="file" name="filetoupload" multiple="true" style="width:200px;"></div>
+                        <script type="text/javascript" src="/static/js/jquery.upload-1.0.2.min.js"></script>
+                        <script type="text/javascript">
+                            $('#filetoupload').change(function() {
+                                $("#upload-prompt").text("上传中，请稍候！");
+                                $("#upload-prompt").show();
+                                if($(this).val()){
+                                    $(this).upload("/upload/", function(res) {
+                                        if(res.status == 200){
+                                            $("#upload-prompt").text(res.msg);
+                                            var con = document.getElementById("id_message").value;
+                                            document.getElementsByTagName('textarea')[0].focus();
+                                            document.getElementById("id_message").value = con+"\n"+res.url+"\n";
+                                            //$("#id-content").val(res.url);
+                                        }else{
+                                            alert(res.msg);
+                                        }
+                                    }, 'json');
+                                }
+                            });
+                        </script>
+                        <div class="frm-buttons">
+                            <span class="submit"><input type="submit" value="{% trans "Submit" %}" name="submit" class="btn btn-primary dropdown-toggle"/></span>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <div id="showcontent"></div>
+                    <p><strong>提示：</strong></p>
+                    <p>1、贴图片：可直接贴图片地址，如http://www.pujia8.com/static/img/focus2_2.jpg；也可直接上传图片，支持jpg|jpeg|gif|png格式的图片。</p>
+                    <p>2、传附件：直接上传即可，支持zip|rar|gz|7z|apk|ipa格式的文件。</p>
+                    <p>3、贴视频：可直接贴视频地址栏里的网址，如http://www.tudou.com/programs/view/PAH86KJNoiQ/ （支持土豆、优酷、B站、A站、七牛和乐视）。</p>
+                    <p>4、贴音频：直接帖音频的载点即可，支持mp3/wav/ogg格式，如http://www.pujia8.com/static/x-japan-hong.mp3。</p>
+                    <p>5、贴代码：使用[code]和[/code]括起来即可，如[code]print 'hello'[/code]</p>
+                    <p>6、加粗：使用[b]和[/b]括起来即可，如[b]加粗文字[/b]。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% if comments %}
+{% load gravatar %}
+{% load pagination_tags %}
+{% with comments=comments|slice:"::-1"%}
+{% autopaginate comments 30 %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+    <div class="modal modal-fix">
+        <div class="modal-header">
+            <h3>{{ comments_count }}条评论</h3>
+        </div>
+        <div id="modal-body" class="modal-body">
+            {% for comment in comments %}
+                <table class="post">
+                    <tbody>
+                    <tr>
+                        <td width="48" valign="top" style="text-align: center">
+                            {% gravatar_for_user comment.user %}
+                        </td>
+                        <td width="10"></td>
+                        <td width="auto" valign="top">
+                            <a href="/user/{{ comment.user_id }}/" target="_blank">{{ comment.user_name }}</a><small class="pull-right">{{ comment.submit_date|date:"Y-m-d H:i:s" }} </small>
+                            <p>{{ comment.comment|pujia_text|safe }}</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endfor %}
+            {% paginate %}
+        </div>
+    </div>
+{% endwith %}
+<script type="text/javascript" src="/static/js/jquery-ias.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        jQuery.ias({
+            container : '.span8 #modal-body',
+            item: '.post',
+            pagination: '#modal-body .pagination',
+            next: '.next-posts a',
+            loader: '<div style="text-align: center"><img src="/static/img/loader.gif"/></div>',
+            triggerPageTreshold: 1,
+            trigger: '<div style="text-align: center">载入更多</div>'
+        });
+    });
+</script>
+{% endif %}

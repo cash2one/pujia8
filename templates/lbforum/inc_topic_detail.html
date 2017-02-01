@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load gravatar %}
+
+<table class="post">
+    <tbody>
+    <tr>
+        <td class="avatar_td" valign="top">
+            <a class="dark" href="{% url 'lbforum_user_profile' t.posted_by.pk %}">{% gravatar_for_user t.posted_by %}</a>
+        </td>
+        <td width="auto" valign="top">
+		{% if t.num_replies > 1 %}
+            <div valign="center" class="pull-right">
+                <a target="_blank" href="{% url 'lbforum_topic' t.id %}?page={% page_info t.num_replies %}#comments"><span class="badge{% if t.num_replies > 50 %} badge-hot{% else %} badge-info{% endif %}">{{ t.num_replies|add:"-1"}}</span></a>
+            </div>
+		{% endif %}
+            <span>
+                {% if t.topic_type %}[{{ t.topic_type }}]{% endif %}<a target="_blank" href="{{ t.get_absolute_url }}">{% if t.level >= 60 %}<font color="#FF0000">{{t.subject}}</font>{% else %}{{t.subject}}{% endif %}</a>
+                <p><small>
+                    {% if not forum %}
+                        <a href="{% url 'lbforum_forum' t.forum.slug %}">{{t.forum.name}}</a> &bull;
+                    {% endif %}
+                    <a href="{% url 'lbforum_user_profile' t.posted_by.pk %}">{{t.posted_by.username}}</a> &bull;
+                    {{ t.get_last_post.update|lbtimesince }} &bull;
+                    {{ t.num_views }} {% trans "views" %} &bull;
+                    {% trans "Last post" %}来自{{ t.get_last_post.posted_by }}
+                </small></p>
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+

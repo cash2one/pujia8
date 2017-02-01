@@ -1,0 +1,22 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    {% if perm_edit_game %}
+                        <form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                            <table>
+                                {{ form.as_table }}
+                            </table>
+                            <p><input class="btn btn-primary" type="submit" value="修改"></p>
+                        </form>
+                    {% else %}
+                        <p>您无权编辑他人的主题哦！</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+先
+python manage.py schemamigration games --initial
+修改model后再执行
+python manage.py schemamigration games --auto
+python manage.py migrate games 0001 --fake
+python manage.py migrate games
+
+
+ 如果你想把表 从
+
+class zjm_model(models.Model):
+    a = models.CharField(max_length=36)
+    b = models.CharField(max_length=36)
+
+变成这样
+
+class zjm_model(models.Model):
+    a = models.CharField(max_length=36)
+    b = models.CharField(max_length=36)
+    c = models.CharField(max_length=36)
+
+你就需要用到south ， 因为syncdb 不管用 ， south将来将被加入到django中
+
+INSTALLING SOUTH
+
+pip install south     (if you’re lucky, otherwise RTFM)add ‘south’ to your project’s INSTALLED_APPSrun ‘syncdb’     (before you create your own models)note: this is the last time you’ll run ‘syncdb’
+YOUR FIRST MIGRATION
+
+create a new app and create your initial ‘models.py’ file for itadd your app to your project’s INSTALLED_APPSrun ‘python manage.py schemamigration myapp --initial’      (creates your initial migration, note: those are two dashes hyphens before initial)run ‘python manage.py migrate myapp’     (uses this initial migration to create your app’s DB tables)
+MIGRATING A CHANGED MODEL
+
+modify your app’s models.py file    (e.g., add a new column somewhere)run ‘python manage.py schemamigration myapp --auto’    (creates a new migration, note: those are two dashes hyphens before auto)run ‘python manage.py migrate myapp’    (applies this new migration)
+
+
+　　1）创建一个没有数据库的新项目时
+　　　　1、创建数据库
+　　　　2、将south添加到INSTALLED_APPS
+　　　　3、运行syncdb命令，它将django和south的数据表加入到数据库中
+　　　　4、将你创建的apps添加到INSTALLED_APPS
+　　　　5、对每个app分别运行“python manage.py schemamigration app_name --initial”，它将在每个app的目录下创建migration目录和相应的文件
+　　　　6、然后运行“python manage.py migrate app_name”，这一步将app的数据表加入到数据库中
+　　2）在带有数据库的已存项目中使用south
+　　　　1、将south加入到INSTALLED_APPS中
+　　　　2、运行syncdb，它将south的数据表加入到数据库中
+　　　　3、对每个app分别运行python manage.py schemamigration app_name --initial，它将在每个app的目录下创建migration目录和相应的文件
+　　　　4、对每个app分别运行“python manage.py migrate app_name 0001 --fake”，该命令不会对数据库做任何操作，只是欺骗一下south，让它在south_migrationhistory表中添加一些记录以便于下次你想创造migration文件的时候所有东西都已搞定。
+　　3、在没有数据库的已存项目中使用south
+　　　　1）创建数据库
+　　　　2）将south加入到INSTALLED_APPS中
+　　　　3）对每个app分别运行“python manage.py schemamigration app_name --initial”，它将在每个app的目录下创建migration目录和相应的文件
+　　　　4）运行syncdb，它将所有没有migrations的apps加入到数据库中
+　　　　5）然后运行“python manage.py migrate”命令，它将对你的所有apps运行迁移操作。

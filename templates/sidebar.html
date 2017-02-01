@@ -1,0 +1,17 @@
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load lbforum_widget_tags %}
+{% load flatpages %}
+{% load adm_tags %}
+
+{% cur_user_profile %}
+<div class="modal modal-fix" id="recommend">
+    <div class="modal-header">
+        <h3><a target="_blank" href="/pujiagames/">扑家联运</a></h3>
+    </div>
+    <div class="modal-body">
+        {% show_ad 'sidebar_up' %}
+    </div>
+</div>
+{% rank_games %}
+{% rank_topics %}

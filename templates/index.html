@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load pagination_tags %}
+{% load gravatar %}
+{% load lbforum_widget_tags %}
+{% load thumbnail %}
+{% load flatpages %}
+{% load comments_widget_tags %}
+{% load game_tags %}
+{% load adm_tags %}
+{% load gifts_tags %}
+{% load flow_tags %}
+
+{% block description %}国内首个汉化游戏发布平台，为玩家提供最新的汉化资讯和汉化资源下载。同时又是个同性/异性玩家交友社区，据闻有5w妹子驻扎。{% endblock %}
+
+{% block content %}
+    {% get_flatpages '/announcement/' as announcement_pages %}{% for announcement in announcement_pages %}{{ announcement.content|safe }}{% endfor %}
+
+    <div class="row">
+        <div class="span8">
+            <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    {% get_flatpages '/focus/' as focus_pages %}{% for focus in focus_pages %}{{ focus.content|safe }}{% endfor %}
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+            </div>
+        </div>
+        <div class="span4">
+            {% cur_user_profile %}
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3><a target="_blank" href="/pujiagames/">扑家联运</a></h3>
+                </div>
+                <div class="modal-body">
+                    {% show_ad 'index' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% index_news %}
+
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3><a target="_blank" href="/library/">游戏库</a><span class="pull-right"><a target="_blank" href="/library/category/psv/"><span class="badge badge-info">PSV</span></a> <a target="_blank" href="/library/category/android/"><span class="badge badge-info">安卓</span></a> <a target="_blank" href="/library/category/3ds/"><span class="badge badge-info">3DS</span></a> <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="location.href='/library/submit/'">发布</button></span></h3>
+                </div>
+                <div class="modal-body">
+                    {% for game in games %}
+                        <div class="game_list">
+                            <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="/library/{{ game.id }}/">
+                                <div class="game_img_show">
+                                    <img height="100px" src="{% thumbnail game.imagefile 100x100 %}" alt="{{ game.title_cn }}">
+                                </div>
+                            </a>
+                            {% language_label game.language %} <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="/library/{{ game.id }}/">{% if game.hot == '1' %}<font color="#FF0000">{{ game.title_cn|slice:"16" }}</font>{% else %}{{ game.title_cn|slice:"16" }}{% endif %}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% collection %}
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>主题列表
+                        <span id="forum_order_by" class="pull-right">
+                            {{ form.order_by }}
+                        </span>
+                    </h3>
+                </div>
+                <div id="topics_list" class="modal-body" style="overflow:scroll;overflow-x:hidden;overflow-y:hidden">
+                    {% autopaginate topics 40 %}
+                    {% for t in topics %}
+                        {% include 'lbforum/inc_topic_detail.html' %}
+                        {% if forloop.counter == 6 %}
+                            {% get_flatpages '/AD640/' as ad_640_pages %}{% for ad_640 in ad_640_pages %}{{ ad_640.content|safe }}{% endfor %}
+                        {% endif %}
+                        {% if forloop.counter == 15 %}
+                            {% get_flatpages '/AD640/' as ad_640_pages %}{% for ad_640 in ad_640_pages %}{{ ad_640.content|safe }}{% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% paginate %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span4">
+            {% if unpost_games %}
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3><a target="_blank" href="/library/">发布倒计时</a><span class="pull-right"></span></h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in unpost_games %}
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 20px">
+                        <tbody>
+                        <tr>
+                            <td width="100" valign="top" style="text-align: center">
+                                <a target="_blank" href="/library/{{ game.id }}/"><img src="{% thumbnail game.imagefile 100x100 %}" alt="{{ game.title_cn }}中文汉化版发布"></a>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                        <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a><br>
+                                        游戏平台：{% for platform in game.platform.all %}{{ platform }} {% endfor %}<br>
+                                        汉化小组：{{ game.team }}<br>
+                                        发布日期：{{ game.publish_time|date:"Y-m-d" }}<br>
+                                        离发布还剩：<font color="#FF0000">{{ game.publish_time|Countdown }}</font>
+                            </td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if wish_games %}
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3><a target="_blank" href="/library/">汉化许愿池</a></h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for wish in wish_games %}
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 20px">
+                        <tbody>
+                        <tr>
+                            <td width="180" valign="top" style="text-align: center">
+                                <a target="_blank" href="/wish/{{ wish.slug }}/"><img src="{% thumbnail wish.gamepack 180x180 %}" alt="{{ wish.title }}"></a>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                    <a target="_blank" title="{{ wish.title }}汉化许愿池" href="/wish/{{ wish.slug }}/"><strong>{{ wish.title }}</strong></a><br>
+                                    游戏平台：{% for platform in wish.platform.all %}<a target="_blank" href="/library/category/{{ platform|lower }}/"><span class="label label-inverse">{{ platform }}</span></a> {% endfor %}<br>
+                                    立项小组：{{ wish.team }}<br>
+                                    游戏类型：{{ wish.game_type }}<br>
+                                    发起日期：{{ wish.add_time|date:"Y-m-d" }}<br>
+                                    截止日期：{{ wish.deadline|date:"Y-m-d" }}<br>
+                                    许愿进度：{{ wish|wish_rate }}%
+                                </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endfor %}
+                        <hr>
+                        {% for wish in wish_games_fin %}
+                        <ul>
+                            <li>
+                                {% for platform in wish.platform.all %}[{{ platform }}] {% endfor %}<a target="_blank" href="/wish/{{ wish.slug }}/" title="{{ wish.title }}">{{ wish.title }}</a><span class="pull-right">已达成</span>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if gifts %}
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3><a target="_blank" href="/gifts/" title="福利 / 礼包">福利 / 礼包</a></h3>
+                </div>
+                <div class="modal-body">
+                {% for gift in gifts %}
+                    <table id="gift{{ gift.id }}" class="post">
+                        <tbody>
+                            <tr>
+                                <td width="100" valign="top" style="text-align: center">
+                                    <p><a target="_blank" href="{{ gift.icon.url }}"><img src="{% thumbnail gift.icon 100x100 %}"></a></p>
+                                </td>
+                                <td width="10"></td>
+                                <td width="auto" valign="top">
+                                    <p>
+                                        <a href="{{ gift.url }}" target="_blank"><b>{{ gift.subject }}</b></a><br>
+                                        {{ gift.description|linebreaksbr }}<br>
+                                        耗费{{ gift.pp }}PP 概率{% gifts_rate gift.id %}% 剩余{% gifts_num gift.id %}个 已抽{{ gift.times }}次<br>
+                                        {% exchange_btn gift.id %}
+                                        <p id="exchange_info_{{ gift.id }}"></p>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% show_hot_comments %}
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>求汉化榜</h3>
+                </div>
+                <div class="modal-body">
+                        {% for game in games_qiuhanhua %}
+                            <div class="game_list">
+                                <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="/library/{{ game.id }}/">
+                                    <div class="game_img_show">
+                                        <img height="100px" src="{% thumbnail game.imagefile 100x100 %}" alt="{{ game.title_cn }}">
+                                    </div>
+                                </a>
+                                <span class="label label-inverse">{{ game.qiuhanhua_num }}</span> <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="/library/{{ game.id }}/">{% if game.hot == '1' %}<font color="#FF0000">{{ game.title_cn|slice:"16" }}</font>{% else %}{{ game.title_cn|slice:"16" }}{% endif %}</a>
+                            </div>
+                        {% endfor %}
+                </div>
+            </div>
+
+            {% get_flatpages '/projects/' as projects %}{% for project in projects %}{{ project.content|safe }}{% endfor %}
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>PP榜</h3>
+                </div>
+                <div class="modal-body">
+                    {% for u in pp_rank %}
+                        <table class="ranking">
+                          <tbody>
+                            <tr>
+                              <td style="width: 10%">
+                                {% if forloop.counter == 1 %}<span class="ranking-num gold">{% else %}{% if forloop.counter == 2 %}<span class="ranking-num silver">{% else %}{% if forloop.counter == 3 %}<span class="ranking-num bronze">{% else %}<span class="ranking-num">{% endif %}{% endif %}{% endif %}{{ forloop.counter }}</span></td>
+                              <td style="width: 80%"><a target="_blank" href="{% url 'lbforum_user_profile' u.user.pk %}" title="{{ u }}">{{ u }}</a></td>
+                              <td style="width: 10%"><span class="pull-right">{{ u.pp }}PP</span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>超言弹榜</h3>
+                </div>
+                <div class="modal-body">
+                    {% for u in super_comment_rank %}
+                        <table class="ranking">
+                          <tbody>
+                            <tr>
+                              <td style="width: 10%">
+                                {% if forloop.counter == 1 %}<span class="ranking-num gold">{% else %}{% if forloop.counter == 2 %}<span class="ranking-num silver">{% else %}{% if forloop.counter == 3 %}<span class="ranking-num bronze">{% else %}<span class="ranking-num">{% endif %}{% endif %}{% endif %}{{ forloop.counter }}</span></td>
+                              <td style="width: 80%"><a target="_blank" href="{% url 'lbforum_user_profile' u.user.pk %}" title="{{ u }}">{{ u }}</a></td>
+                              <td style="width: 10%"><span class="pull-right">{{ u.super_comment }}弹</span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    {% endfor %}
+                </div>
+            </div>
+            {% lbf_status %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>友情链接</h3>
+                </div>
+                <div class="modal-body">
+                    <p>{% load flatpages %}{% get_flatpages '/links/' as links_pages %}{% for link in links_pages %}{{ link.content|safe }}{% endfor %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/static/js/jquery-ias.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            jQuery.ias({
+                container : '.span8 #topics_list',
+                item: '.post',
+                pagination: '#topics_list .pagination',
+                next: '.next-posts a',
+                loader: '<div style="text-align: center"><img src="/static/img/loader.gif"/></div>',
+                triggerPageTreshold: 1,
+                trigger: '<div style="text-align: center">载入更多</div>'
+            });
+        });
+        function exchange(id){
+            $.ajax({
+                url : "/gifts/exchange/"+id+"/",
+                type : "POST",
+                dataType: "json",
+                data : {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(json) {
+                    alert(json.msg);
+                },
+            });
+        }
+    </script>
+    {% xianliaome user %}
+{% endblock %}

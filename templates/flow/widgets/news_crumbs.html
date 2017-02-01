@@ -1,0 +1,14 @@
+{% load flow_tags %}
+<div class="appgameVR_r">
+{% for flow in flows %}
+    <div>
+        <a target="_blank" href="{% url 'news_info' flow.pk %}" title="{{ flow.title }}">
+            {% show_img flow %}
+            <div>
+                <p>{{ flow.title }}</p>
+                <span>{{ flow.content|striptags|slice:"50" }}</span>
+            </div>
+        </a>
+    </div>
+{% endfor %}
+</div>

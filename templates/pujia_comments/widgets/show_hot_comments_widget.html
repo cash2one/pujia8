@@ -1,0 +1,32 @@
+{% if comments %}
+{% load gravatar %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load comments_tags %}
+        <div class="modal modal-fix">
+            <div class="modal-header">
+                <h3><a target="_blank" href="/comment/hotlist/">超言弹</a></h3>
+            </div>
+            <div class="modal-body">
+                {% for comment in comments %}
+                <div id="c{{ comment.id }}" class="super_comment">
+                    <div class="game_img">
+                        {% get_comment_game_img comment %}
+                    </div>
+                    <div class="comment_info">
+                        <div class="comment_head">
+                            <!-- <div class="user_img"><a href="{% url 'lbforum_user_profile' comment.name.pk %}">{% gravatar_for_user comment.name %}</a></div> -->
+                            <div class="game_title">{% get_comment_game_title comment %}</div>
+                        </div>
+
+                        <div class="comment_time">
+                            <small>{{ comment.name }} 于 {{ comment.date|lbtimesince }}</small>
+                        </div>
+                        <div class="comment_content">{{ comment.content|slice:"58" }}...</div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endif %}

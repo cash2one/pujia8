@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>进击的巨龙OL_扑家汉化平台_扑家汉化组_扑家吧</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="进击的巨龙,汉化,扑家,扑家汉化组,扑家汉化平台">
+    <meta name="description" content="《进击的巨龙》是一款以《龙与地下城》为故事背景，使用大众耳熟能详的“龙”作为核心元素，配合幻想华丽的日系美术风格，以RPG为主并且搭配轻度SLG玩法，给予玩家另外一种神秘但是又充满魔幻魅力的龙与地下城世界。">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+</head>
+<body bgcolor="#000000" style="overflow: hidden;">
+{% if user.is_authenticated %}
+<iframe id="gameiframe" width="100%" height="100%" frameborder='0' framespacing="0" scrolling='no' noresize="noresize" src="http://www.wanadalu.com/hi_ports/mixlogin.php?{{ args }}"></iframe>
+{% else %}
+<p style="color:white">请先<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>。如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+<img src="/static/upload/20150516153956_96.jpg" width="100%" alt="进击的巨龙OL">
+{% endif %}
+</body>
+</html>

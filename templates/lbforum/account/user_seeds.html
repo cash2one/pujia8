@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load lbforum_widget_tags %}
+{% load pagination_tags %}
+{% load gravatar %}
+
+{% block title %}{{  block.super }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tbody>
+                        <tr>
+                            <td width="80" valign="top" style="text-align: center">
+                                <p>{% gravatar_for_user view_user 80 %}</p>
+                                <p><a target="_blank" href="/account/change/avatar/">设置头像</a></p>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                <p><strong>{{ view_user }}</strong> (uid: {{ view_user.id }})</p>
+                                <p>{% trans "Registered" %}: {{view_user.date_joined|date:"Y-m-d"}} {% trans "Last login" %}: {{view_user.last_login|date:"Y-m-d"}}</p>
+                                {% if user == view_user %}<p>注册邮箱: {{ view_user.email }}</p>{% endif %}
+                                <P><span>{% trans "Topics" %}: <a href="{% url 'lbforum_user_topics' view_user.pk %}">{{view_user.topic_set.all.count}}</a></span>
+                                <span>{% trans "Posts" %}: <a href="{% url 'lbforum_user_posts' view_user.pk %}">{{view_user.post_set.all.count}}</a></span> <span>收藏: <a href="{% url 'lbforum_user_favs' view_user.pk %}">{{ view_user.seed_set.all.count }}</a></span> <span>PP: <a href="/topic/1896/">{{ view_user.get_profile.pp }}</a></span>
+                                </P>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal modal-fix">
+                {% autopaginate topics 15 %}
+                <div class="modal-header">
+                    <h3>{{ view_user }}已收藏的主题</h3>
+                </div>
+                <div id="modal-body" class="modal-body">
+                    <form action="." method="POST" enctype="multipart/form-data" >{% csrf_token %}
+                    {% for t in topics %}
+                        <table class="post">
+                            <tbody>
+                            <tr>
+                                <td><input name="tid" type="checkbox" value="{{ t.id }}"></td>
+                                <td width="64" valign="top" style="text-align: center">
+                                    <a class="dark" href="{% url 'lbforum_user_profile' t.posted_by.pk %}">{% gravatar_for_user t.posted_by %}</a>
+                                </td>
+                                <td width="auto" valign="top">
+                                {% if t.num_replies > 1 %}
+                                    <div valign="center" class="pull-right">
+                                        <a target="_blank" href="{% url 'lbforum_topic' t.id %}?page={% page_info t.num_replies %}#comments"><span class="badge">{{ t.num_replies|add:"-1"}}</span></a>
+                                    </div>
+                                {% endif %}
+                                    <span>
+                                        {% if t.topic_type %}[{{ t.topic_type }}]{% endif %}<a target="_blank" href="{{ t.get_absolute_url }}">{% if t.level >= 60 %}<font color="#FF0000">{{t.subject}}</font>{% else %}{{t.subject}}{% endif %}</a>
+                                        <p><small>
+                                            {% if not forum %}
+                                                <a href="{% url 'lbforum_forum' t.forum.slug %}">{{t.forum.name}}</a> &bull;
+                                            {% endif %}
+                                            <a href="{% url 'lbforum_user_profile' t.posted_by.pk %}">{{t.posted_by.username}}</a> &bull;
+                                            {{ t.get_last_post.update|lbtimesince }} &bull;
+                                            {{ t.num_views }} {% trans "views" %} &bull;
+                                            {% trans "Last post" %}来自{{ t.get_last_post.posted_by }}
+                                        </small></p>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    {% endfor %}
+                    {% paginate %}
+                    <input class="btn btn-primary" type="submit" name="del" value="删除">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="modal modal-fix">
+        <div class="modal-body">
+{% if avatar %}
+<div class="alert alert-info">提示：上传头像之后需等待15分钟才会在前端更新。</div>
+<p>当前头像：</p>
+<img src="{{ avatar.url }}">
+{% endif %}
+<p>更新头像：</p>
+    <form enctype="multipart/form-data" method="POST" action="">
+        {% csrf_token %}
+        选择图片：<input id="avatarupload" type="file" name="avatarupload" style="width:200px;">
+        <br/>
+        <input type="submit" value="上传头像" name="submit" class="btn btn-primary">
+    </form>
+        </div>
+</div>
+{% endblock %}

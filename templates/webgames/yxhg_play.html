@@ -1,0 +1,14 @@
+{% extends "base2.html" %}
+
+{% block title %}
+    英雄皇冠_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<iframe id="gameiframe" width="1220px" height="600px" frameborder='0' framespacing="0" scrolling='no' noresize="noresize" src="http://www.wanadalu.com/hi_ports/mixlogin.php?{{ args }}"></iframe>
+{% else %}
+<p>请先<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>。如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+<img src="http://www.pujia8.com/static/upload/20150307120421_25.jpg" alt="像素骑士团" width="492" height="531">
+{% endif %}
+{% endblock %}

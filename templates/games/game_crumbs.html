@@ -1,0 +1,10 @@
+{% load thumbnail %}
+{% load game_tags %}
+<div class="game_list">
+    <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="/library/{{ game.id }}/">
+        <div class="game_img_show">
+            <img height="100px" src="{% thumbnail game.imagefile 100x100 %}" alt="{{ game.title_cn }}">
+        </div>
+    </a>
+    {% language_label game.language %} <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="/library/{{ game.id }}/">{% if game.hot == '1' %}<font color="#FF0000">{{ game.title_cn|slice:"16" }}</font>{% else %}{{ game.title_cn|slice:"16" }}{% endif %}</a>
+</div>

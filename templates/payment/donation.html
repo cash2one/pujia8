@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load comments_tags %}
+{% load flatpages %}
+
+{% block title %}
+    村长打天下 | 扑家吧专区网站
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>村长打天下 - 历史题材策略经营战斗类游戏</h3>
+                </div>
+                <div class="modal-body">
+                    {% get_flatpages '/wg_czdtx/' as wg_xsqst_pages %}{% for wg_xsqst in wg_xsqst_pages %}{{ wg_xsqst.content|safe }}{% endfor %}
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active"><a href="#game_play" data-toggle="tab"><strong>进行游戏</strong></a></li>
+                    </ul>
+                    <div id="GameTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="game_play">
+                            {% if user.is_authenticated %}
+                            <div>
+                                <iframe id="gameiframe" frameborder=0 width="980px" height="860px" src="http://gc.cz.kongzhong.com/czdtxly/loginlygameurl/{{ ly }}/{{ key }}"></iframe>
+                                <p><a class="btn btn-primary" onclick="fullscreen(1);">全屏游戏</a></p>
+                            </div>
+                            {% else %}
+                            <p>请先<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>。如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+                            <img src="http://www.pujia8.com/static/upload/20150307120421_25.jpg" alt="村长打天下" width="492" height="531">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span8">
+            <div id="comments">
+                <div id="quick_reply" class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发射言弹</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_comments_list for key as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+
+        </div>
+        <div class="span4">
+            {% get_hot_comments_list for key as comments %}
+            {% include 'pujia_comments/show_hot_comments.html' %}
+        </div>
+    </div>
+{% endblock %}

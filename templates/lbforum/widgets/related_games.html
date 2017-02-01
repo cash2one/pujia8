@@ -1,0 +1,15 @@
+{% load game_tags %}
+{% load thumbnail %}
+
+{% if related_games %}
+<div class="modal modal-fix" id="related_games">
+    <div class="modal-header">
+        <h3><a target="_blank" href="/pujiagames/">相关游戏</a></h3>
+    </div>
+    <div class="modal-body">
+        {% for game in related_games %}
+            {% include 'games/game_crumbs.html' %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

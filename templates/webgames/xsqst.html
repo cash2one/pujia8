@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load comments_tags %}
+{% load flatpages %}
+
+{% block title %}
+    像素骑士团_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>像素骑士团-放置类冒险RPG</h3>
+                </div>
+                <div class="modal-body">
+                    {% get_flatpages '/wg_xsqst/' as wg_xsqst_pages %}{% for wg_xsqst in wg_xsqst_pages %}{{ wg_xsqst.content|safe }}{% endfor %}
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active"><a href="#game_play" data-toggle="tab"><strong>进行游戏</strong></a></li>
+                        <li class=""><a href="#game_review" data-toggle="tab"><strong>游戏评测</strong></a></li>
+                        <li class=""><a href="#game_gospel" data-toggle="tab"><strong>心得攻略</strong></a></li>
+                        <li class=""><a href="#exchange_gold" data-toggle="tab"><strong>游戏兑换</strong></a></li>
+                    </ul>
+                    <div id="GameTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="game_play">
+                            {% if user.is_authenticated %}
+                            <div>
+                                <iframe id="gameiframe" frameborder=0 width="800px" height="600px" src="http://s1.pujia8mxwk.90tank.com/pujia8/game.aspx?{{ args }}"></iframe>
+                                <p><a class="btn btn-primary" onclick="fullscreen(1);">全屏游戏</a></p>
+                            </div>
+                            {% else %}
+                            <p>请先<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>。如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+                            <img src="http://www.pujia8.com/static/upload/20150307120421_25.jpg" alt="像素骑士团" width="492" height="531">
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="exchange_gold">
+                            {% if user.is_authenticated %}
+                            <span>
+                                选择服务区：{{ serverform.serverid }}
+                            </span>
+                            <p>
+                                <form method="post" class="form-horizontal">{% csrf_token %}
+                                    <p>你拥有{{ user.get_profile.pp }}PP<br>1PP可兑换1000金币<br>请问你要拿多少PP来进行兑换？</p>
+                                    <div class="control-group">
+                                        <div class="input-prepend">
+                                            <span class="add-on">PP</span><input class="span1" id="exchange_gold_value" size="2" type="text">
+                                        </div>
+                                        <button id="exchange_gold_btn" class="btn btn-primary">兑换金币</button>
+                                    </div>
+                                    <p>此外，可以花1000PP兑换扑家的吉祥物扑姬，紫色英雄，提高11先攻。每个用户限兑换一只。<a target="_blank" href="/topic/11611/">查看详情</a></p>
+                                    <p><button id="exchange_puji_btn" class="btn btn-primary">兑换扑姬</button></p>
+                                    <p>每充值1元可额外获得1PP反馈哟</p>
+                                    <p><button id="exchange_pp_btn" class="btn btn-primary">领取PP</button></p>
+                                </form>
+                            </p>
+                            <p id="exchange_info" class="alert alert-info">提示：兑换后刷新页面重新进入游戏即可获取。</p>
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#exchange_gold_btn").click(function(e) {
+                                        var exchange_gold_value = $("#exchange_gold_value").val();
+                                        $.ajax({
+                                            url : "/webgames/xsqst/exchange/gold/",
+                                            type : "POST",
+                                            dataType: "json",
+                                            data : {
+                                                client_response : exchange_gold_value,
+                                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                                                },
+                                                success : function(json) {
+                                                    $("#exchange_info").show();
+                                                    $('#exchange_info').text(json.msg);
+                                                },
+                                        });
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    });
+                                });
+                            </script>
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#exchange_pp_btn").click(function(e) {
+                                        $.ajax({
+                                            url : "/webgames/xsqst/exchange/pp/",
+                                            type : "POST",
+                                            dataType: "json",
+                                            data : {
+                                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                                                },
+                                                success : function(json) {
+                                                    $("#exchange_info").show();
+                                                    $('#exchange_info').text(json.msg);
+                                                },
+                                        });
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    });
+                                });
+                            </script>
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#exchange_puji_btn").click(function(e) {
+                                        $.ajax({
+                                            url : "/webgames/xsqst/exchange/puji/",
+                                            type : "POST",
+                                            dataType: "json",
+                                            data : {
+                                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                                                },
+                                            success : function(json) {
+                                                $("#exchange_info").show();
+                                                $('#exchange_info').text(json.msg);
+                                            },
+                                        });
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    });
+                                $("#exchange_puji_btn").ajaxSuccess(function(){
+                                      var exp = new Date();
+                                      exp.setTime(exp.getTime() + 60*1000);
+                                      document.cookie = "exchange_puji=1;expires=" + exp.toGMTString() + ";path=/";
+                                    });
+                                });
+                            </script>
+                            {% else %}
+                            <p>你尚未登录，不能进行兑换</p>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="game_review">
+                            <div><p>大家好，今天我们给大家带来一款注重趣味和休闲性的冒险放置类游戏-----------《像素骑士团》<br><br>这款游戏是2D的像素画风，非常的简洁，加上Q版的人物和可爱的图标，对比现在页游普遍眼花缭乱的界面，该游戏给人一种清新的感觉。<br><img src="/static/upload/20150307141444_24.jpg" alt=""><br><br>游戏的玩法也给我了两种感觉，一是休闲，二是趣味。休闲在玩家只需要挂机就能积累经验和金钱的，即使玩家下线了也一样。所以完全可以利用自己的碎片时间来进行游玩。趣味在跌宕起伏的剧情和种类繁多的英雄，玩家需要收集自己喜爱的英雄，不断的强化他们来推进一幕又一幕的精彩剧情。<br><img src="/static/upload/20150307141444_11.jpg" alt=""><br><br>游戏中还有一个新鲜的玩法是挖矿，为了强化英雄勇者的战斗力，玩家需要大量的矿石，而为了获得这些矿石，则需要去地底挖矿，在挖矿的过程中玩家同样会碰到来阻挠的怪物，并且当眼前出现自己想要挖的矿物时也是一件很激动的事情<br><img src="/static/upload/20150307141444_83.jpg" alt=""><br><br>玩家还可以带领自己的英雄团和其他玩家的英雄团PK，看看谁的组合更胜一筹，谁又收藏有自己梦寐以求的英雄<br><img src="/static/upload/20150307141444_70.jpg" alt=""><br><br>总体来说《像素骑士团》虽然在画面视觉效果上还有所欠缺，但是在玩法的新颖和休闲性方面是其他游戏无法比拟的，大家有兴趣的话不妨亲身体验一下，相信你会爱上这款别致的游戏。<br><img src="/static/upload/20150307141444_51.jpg" alt=""><br></p></div>
+                        </div>
+                        <div class="tab-pane fade" id="game_gospel">
+                            <div><p><strong>《像素骑士团》货币总览</strong><br>《像素骑士团》中各类冒险奖励较多，货币种类也因此达到了十种，而这其中绝大多数货币都能兑换获取较为丰厚的奖励。<br><br>具体货币如下：<br><img src="/static/upload/20150307142106_52.jpg" alt=""><br><br><strong>《像素骑士团》辅助系统全介绍</strong><br>挖矿与英雄培养是《像素骑士团》的核心玩法，围绕着这一核心玩法，游戏中也有部分辅助系统供玩家体验。<br>招募：游戏中英雄的主要来源，玩家可通过招募获得各种不同品质的英雄。游戏中招募的种类共有7种：<br>招募所：通过游戏币进行招募，最高可获得蓝色品质的英雄；混乱之门：通过混乱徽记进行招募，可获得所有品质的英雄；辉煌之门：通过辉煌徽记进行招募，可获得所有品质的英雄；律动之门：通过自然徽记进行招募，可获得所有品质的英雄；英雄之门：通过堡垒徽记进行招募，可获得所有品质的英雄；万象之门：通过血钻进行招募，可招募到至少为蓝色品质的英雄；传奇之门：通过血钻进行连续十次招募，招募获得的英雄至少是蓝色品质。<br><img src="/static/upload/20150307142145_68.jpg" alt=""><br><br>神殿：由于招募的随机性，在很多时候，我们并不能总是如愿的得到自己想要获得的英雄，同时又会积累许多对自己无用的英雄，因此《像素骑士团》中的神殿系统在这过程中起到了很好的补充。<br>游戏中玩家对于自己不需要的英雄可以进行解雇，解雇后可按英雄品质获得一定量的荣誉碎片，而游戏中的神殿每天刷新，刷新后出现一批新的英雄，包括蓝色、紫色、金色等品质，玩家可利用荣誉碎片任意招募一位英雄，但在神殿中玩家每天只有一个招募名额，所以需要玩家谨慎选择哟。<br><img src="/static/upload/20150307142216_38.jpg" alt=""><br><br>商会：由于神殿中招募英雄需要消耗大量的荣誉碎片，要积累这些荣誉碎片并不容易，游戏中的商会系统则提供玩家每天完成指定物品交换，就可换取一定量的荣誉碎片，帮助玩家能够快速积累碎片。<br><img src="/static/upload/20150307142237_54.jpg" alt=""><br><br>转生：有些英雄在经过培养后，实力不俗，但此时当玩家获得一个更好的新的英雄时则犯了难，继续用原有的英雄，最终实力上受限，但是使用新英雄，又需要重新培养，陷入两难境地。因此玩家可通过游戏中的转生系统对英雄进行强化转移，所有强化数值都将被转移到新的英雄身上去，这样就能瞬间使用上实力超群的新英雄了。<br><img src="/static/upload/20150307142259_31.jpg" alt=""><br><br>竞技场：俗话说，与天斗地斗不如与人斗，玩家之间相互战斗才是检验自身实力的最好方式，而竞技场系统则是为玩家PK而专门打造的，玩家可在该系统中选择与自身实力相当的其他玩家进行PK，当连胜场次达到一定数量时，还可获得“勇气点数”、“冠军点数”与“王者之章”，前两种点数是兑换魂晶的重要数值，可为玩家的实力更上一层楼，而“王者之章”可兑换稀有的强力英雄。<br><img src="/static/upload/20150307142318_13.jpg" alt=""><br><br>争霸赛：争霸赛系统则是竞技场系统升级加强版，在这里玩家只能看见自身前后的对手，通过不断击败排名靠前的对手，可以成为游戏中的霸主，而排名靠前的玩家，每天都能获得大量的“王者之章”。<br><img src="/static/upload/20150307142337_53.jpg" alt=""><br><br><strong>《像素骑士团》英雄养成介绍</strong><br>《像素骑士团》中的战斗与绝大部分游戏都有着比较显著的差异，玩家可一次性出战多个英雄参与战斗，每个英雄都有其自身的战力值，最终玩家所有出战英雄战力值的总和即是玩家的战力值。战力值同时代表着攻击力与血量，当战力值被打至0时，也意味着战斗失败。<br>除了战力值，游戏中还有四种属性供玩家选择提升，分别是先攻、防御、闪避、王者，作用各不相同，搭配也千变万化，可衍生出数不尽的战术<br>游戏中的英雄共有6种品质，品质如下：<br><img src="/static/upload/20150307142423_29.jpg" alt=""><br><br>高品质的武将不仅在技能属性上占有优势，在后期培养，属性成长则更是天壤之别，到底是为何会产生如此大的差异呢？<br>每个英雄都可由多种强化方式，主要如下：<br><img src="/static/upload/20150307142442_41.jpg" alt=""><br><img src="/static/upload/20150307142505_80.jpg" alt=""><br><br>所以可以看出，越是高品质的英雄，其强化手段越多，战力值也就更高。<br>而以上的各种强化方式都能给英雄带来大量的属性提升，因此要培养一个高品质英雄，这些强化方式可谓缺一不可，而这些强化方式所消耗的物品则也各不相同：<br><img src="/static/upload/20150307142528_25.jpg" alt=""><br><br>所以，高品质的英雄经过培养以后，才可称为强大的英雄，再经过英雄之间的组合，技能搭配，才能配置出属于自己的骑士团。 <br><br><strong>《像素骑士团》主角武器入手详解</strong><br>与其他英雄不同，《像素骑士团》中的主角英雄最多可获得十个武器，每一种武器都附带着附属技能，当然同一时间只可装备一种武器。也就是说，主角可有10种技能选择，而这10把武器的入手方法也各不相同，玩家可根据自身需要装备不同武器，以应变战术需要。<br>主角武器详细说明及入手方法如下：<br><img src="/static/upload/20150307142606_26.jpg" alt=""><br><br><strong>《像素骑士团》挖矿系统介绍</strong><br>挖矿系统是《像素骑士团》中极其重要的，也是极富特色一个系统，玩家可在挖矿地图中的土地里任意挖掘，随着挖掘范围的扩大，挖矿地图上的视野范围也将扩大，这样玩家就能挖掘到更多的矿物资源。<br>玩家每次挖矿都会消耗挖矿次数，挖矿次数每2分钟增长一点。而不同的矿产，所需的挖掘时间也各不相同，比如最低等级的铜矿几秒中即可挖掘，而红宝石的挖掘时间则要20分钟，更高级的矿产，如钻石和泰坦铁，都是数十分钟甚至数小时，而为了缩短挖矿时间，玩家可用“雷管”爆破。<br><img src="/static/upload/20150307142635_24.jpg" alt=""><br><br>游戏中每一种矿产在挖矿地图的中分布也各不相同，低等级的矿产分布在离地表较近的区域，等级越高的矿物，则埋在地底深处，所以要想挖取高等级矿产，那就埋头苦挖吧。<br><img src="/static/upload/20150307142653_67.jpg" alt=""><br><br>而各种矿产作为游戏中的重要资源，其作用当然也是举足轻重的，不仅可以开启背包格，同时最重要的消耗则是用来强化武将，强化后的英雄将大大提高战斗力。除了矿产之外，挖矿的过程中还有可能遇见“巨魔雕像”，击杀之后有几率获得道具“巨魔雕像”，该道具可以用来觉醒英雄，觉醒的英雄也能大大提升战力，所以有闲暇的时候就来挖两下，可别偷懒哟。<br><img src="/static/upload/20150307142714_95.jpg" alt=""><br><br><strong>《像素骑士团》冒险推图介绍</strong><br>“这或许是有史以来最轻松的冒险推图玩法”，用这样一句话来形容《像素骑士团》冒险部分的内容真是一点都不过分，这不但是基于游戏里的冒险几乎不用战斗，更惬意的是玩家只要保证主角的“饱足度”足够，金钱和经验就滚滚而来，坐享其成，无论你是走开，下线，都不受影响。<br>《像素骑士团》中推图的玩法不同于以往，采用的是挂机形式，只要角色的“饱足度”不为0，即可自动推图，无需控制。在挂机的过程中玩家经验和金币的收益，都会随着该关卡的标准固定产出，轻轻松松就不愁吃穿。<br><img src="/static/upload/20150307142808_87.jpg" alt=""><br>《像素骑士团》中一共有180个关卡，绝大部分关卡分为三个节点，玩家在挂机时将会增加探索进度，一旦进度满后，将激活该关卡的节点，触发一些事件，比如发现一个怪物与之战斗，或是获得一定的战力提升，也有可能让你交出一个道具。只要条件满足，皆能顺利过关。除此之外，随着进度的推移，玩家还可在关卡中获得一些宝箱，能收获一些额外的经验、金钱、道具，以及杂物。<br><img src="/static/upload/20150307142826_66.jpg" alt=""><br>当然，游戏中每一个关卡也有一些进入的要求，有出战人数的限制，也有战力的要求，但如果玩家能顺着主线走，几乎是可以无脑通过的，总之整个过程休闲轻松无压力，简直是对“躺着收钱”最准确的诠释。<br><img src="/static/upload/20150307142842_39.jpg" alt=""><br></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span8">
+            <div id="comments">
+                <div id="quick_reply" class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发射言弹</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_comments_list for args as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+
+        </div>
+        <div class="span4">
+            {% get_hot_comments_list for args as comments %}
+            {% include 'pujia_comments/show_hot_comments.html' %}
+        </div>
+    </div>
+{% endblock %}

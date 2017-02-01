@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+    豌豆荚游戏_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block content %}{% load thumbnail %}
+
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>豌豆荚游戏（{{ games|length }}款）
+                    </h3>
+                </div>
+                {% load pagination_tags %}{% autopaginate games 30 %}{% load thumbnail %}{% load game_tags %}
+                <div id="modal-body" class="modal-body">
+                    {% for game in games %}
+                    <div class="gametable">
+                        <div>
+                            <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="{% wdj_link game %}"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                            <a target="_blank" title="{{ game.title_cn }}{{ game.get_language_display }}版发布" href="{% wdj_link game %}">{% if game.hot == '1' %}<font color="#FF0000">{{ game.title_cn|slice:"12" }}</font>{% else %}{{ game.title_cn|slice:"12" }}{% endif %}</a><br>{{ game.lastFetchTime|date:"Y-m-d H:i:s" }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="modal-footer" class="modal-footer">
+                    {% paginate %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

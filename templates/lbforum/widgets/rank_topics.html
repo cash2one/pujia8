@@ -1,0 +1,31 @@
+<div class="modal modal-fix" id="rank_topics">
+<div class="modal-body">
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active"><a href="#weekly_topics" data-toggle="tab">本周热帖</a></li>
+                        <li class=""><a href="#month_topics" data-toggle="tab">本月热帖</a></li>
+                    </ul>
+
+                    <div id="TopicRankTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="weekly_topics">
+
+			<ul>
+        {% for t in weekly_topics %}
+				<li>{% if t.topic_type %}[{{ t.topic_type }}]{% endif %}<a target="_blank" href="{{ t.get_absolute_url }}">{% if t.level >= 60 %}<font color="#FF0000">{{t.subject}}</font>{% else %}{{t.subject}}{% endif %}</a></li>
+        {% endfor %}
+			</ul>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="month_topics">
+
+			<ul>
+        {% for t in month_topics %}
+				<li>{% if t.topic_type %}[{{ t.topic_type }}]{% endif %}<a target="_blank" href="{{ t.get_absolute_url }}">{% if t.level >= 60 %}<font color="#FF0000">{{t.subject}}</font>{% else %}{{t.subject}}{% endif %}</a></li>
+        {% endfor %}
+			</ul>
+
+                        </div>
+                    </div>
+                </div>
+
+</div>

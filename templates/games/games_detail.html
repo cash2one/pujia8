@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load lbforum_widget_tags %}
+{% load game_tags %}
+{% load comments_tags %}
+{% load gravatar %}
+
+{% block title %}{% for platform in game.platform.all %}[{{ platform }}]{% endfor %} {{ game.title_cn }}{{ game.get_language_display }}版_扑家汉化平台_扑家汉化组_扑家吧{% endblock %}
+
+{% block description %}{{ game.introduce }}{% endblock %}
+
+{% block keywords %}{{ game.title_cn }},{{ game.title_src }},汉化,破解,安卓,苹果,专题,攻略,下载,汉化下载{% endblock %}
+
+{% block content %}{% load thumbnail %}{% load flatpages %}{% load gravatar %}
+    <ul class="breadcrumb">
+        <li><a href="/library/">全部</a><span class="divider">|</span></li>
+        <li><a href="/library/category/android/">Android</a><span class="divider">|</span></li>
+        <li><a href="/library/category/ios/">iOS</a><span class="divider">|</span></li>
+        <li><a href="/library/category/psv/">PSV</a><span class="divider">|</span></li>
+        <li><a href="/library/category/3ds/">3DS</a><span class="divider">|</span></li>
+        <li><a href="/library/category/psp/">PSP</a><span class="divider">|</span></li>
+        <li><a href="/library/category/nds/">NDS</a><span class="divider">|</span></li>
+        <li><a href="/library/category/pc/">PC</a><span class="divider">|</span></li>
+        <li><a href="/library/category/wii/">WII</a><span class="divider">|</span></li>
+        <li><a href="/library/category/ps3/">PS3</a><span class="divider">|</span></li>
+        <li><a href="/library/category/ps2/">PS2</a><span class="divider">|</span></li>
+        <li><a href="/library/category/gba/">GBA</a><span class="divider">|</span></li>
+        <li><a href="/library/category/etc/">ETC</a></li>
+    </ul>
+
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>{{ game.title_cn }} {% if game.title_src %}<small>{{ game.title_src }}</small>{% endif %}<span class="pull-right">{% gravatar_for_user game.name %}</span></h3>
+                    <small>作者：<a target="_blank" href="/user/{{ game.name_id }}/">{{ game.name }}</a> 时间：{{ game.add_time|date:"Y-m-d H:i:s" }} 人气：{{ game.count }}℃ 言弹：<a href="/library/{{ game.id }}/#comments">{% comments_count request.path %}发</a> 来源：<a target="_blank" href="{{ game.publish_url }}">查看</a></small>
+                </div>
+                <div class="modal-body">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tbody>
+                        <tr>
+                            <td width="20%" valign="top" style="text-align: center">
+                                <a href="{{ game.imagefile.url }}"><img src="{% thumbnail game.imagefile 130x130 %}" alt="{{ game.title_cn }}"></a>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                <p>
+                                    {% if game.developer %}开发公司：{{ game.developer }}<br>{% endif %}
+                                    {% if game.language == 'cn' %}{% if not game.h5game %}{% if not game.lianyun %}{% if game.team %}制作小组：{{ game.team }}<br>{% endif %}
+                                    {% if game.state != '2' %}{% if game.level %}制作程度：{{ game.level }}<br>{% endif %}{% endif %}{% endif %}{% endif %}{% endif %}
+                                    发布日期：{{ game.publish_time|date:"Y-m-d" }}<br>
+                                    {% if not game.h5game %}游戏容量：{{ game.game_size }}<br>{% endif %}
+                                    游戏平台：{% for platform in game.platform.all %}<a target="_blank" href="/library/category/{{ platform|lower }}/"><code>{{ platform }}</code></a> {% endfor %}<br>
+                                    {% if tags %}游戏标签：{% for tag in tags %}<a target="_blank" href="/library/all/tag/{{ tag }}/"><code>{{ tag }}</code></a> {% endfor %}{% endif %}<br>
+                                    {% attr_label game %}</p>
+
+                                    {% if game.language != 'cn' %}
+                                        <button id="qiuhanhua" class="btn btn-info" style="margin-bottom:24px; line-height:24px">求汉化({{ game.qiuhanhua_num }})</button>
+                                        <script type="text/javascript">
+                                            $(document).ready(function() {
+                                                $('#qiuhanhua').bind('click', function () {
+                                                    $.get("{% url 'qiuhanhua' game.id %}", function(res) {
+                                                    alert(res.msg);
+                                                    }, 'json');
+                                                });
+                                            });
+                                        </script>
+                                    {% endif %}
+
+                                    {% if not game.h5game %}<button id="download" class="btn btn-danger" style="margin-bottom:24px; line-height:24px">资源下载</button>{% endif %}
+
+                                    {% if game.lianyun %}<button id="libao" class="btn btn-primary" style="margin-bottom:24px; line-height:24px" onclick="location.href='/gifts/'">领取礼包</button>{% endif %}
+
+                                    <script type="text/javascript" charset="utf-8">
+                                    (function(){
+                                        var _w = 36 , _h = 32;
+                                        var param = {
+                                            url:location.href,
+                                            type:'1',
+                                            count:'', /**是否显示分享数，1显示(可选)*/
+                                            appkey:'1766721270', /**您申请的应用appkey,显示分享来源(可选)*/
+                                            title:'{% for platform in game.platform.all %}#{{ platform }}#{% endfor %}{% if game.language == 'cn' %}【{{ game.team }}】{{ game.title_cn }}中文汉化版发布，感谢{{ game.team }}的辛勤汉化，喜欢此游戏的小伙伴们快来下载吧，另外请扩散支持他们哦{% else %}【游戏推荐】{{ game.title_cn }}，我觉得这款游戏很赞哟，大伙快来玩玩吧{% endif %}', /**分享的文字内容(可选，默认为所在页面的title)*/
+                                            pic:'', /**分享图片的路径(可选)*/
+                                            ralateUid:'2375605947', /**关联用户的UID，分享微博会@该用户(可选)*/
+                                            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+                                            rnd:new Date().valueOf()
+                                        }
+                                        var temp = [];
+                                        for( var p in param ){
+                                            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                                        }
+                                        document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+                                    })()
+                                </script>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    {% include 'ad740.html' %}
+
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active"><a href="#game_content" data-toggle="tab"><strong>说明</strong></a></li>
+                        <li class=""><a href="#game_dl" data-toggle="tab"><strong>下载</strong></a></li>
+                        {% if game.review_id %}<li class=""><a href="#game_review" data-toggle="tab"><strong>评测</strong></a></li>{% endif %}
+                        {% if game.gospel_id %}<li class=""><a href="#game_gospel" data-toggle="tab"><strong>攻略</strong></a></li>{% endif %}
+                    </ul>
+                    <div id="GameTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="game_content">
+                            {% team_info game.id %}
+                            <div>{{ game.content|safe }}</div>
+                            {% if game.h5game %}<div><iframe id="gameiframe" class="gameiframe" frameborder=0 src="{{ game.publish_url }}" scrolling="no" onload=""></iframe></div>{% endif %}
+                            <div style="text-align: center">
+                                {% if user.get_profile.check_in_total >= 7 %}
+                                    <a href="javascript:gamescore('{{ game.id }}')"><button id="download" class="btn btn-info" style="margin-top:15px; line-height:24px">宠幸</button></a>
+                                {% else %}
+                                    <a href="javascript:alert('你的总签到数不足7，尚不能进行宠幸！')"><button id="download" class="btn btn-info" style="margin-top:15px; line-height:24px">宠幸</button></a>
+                                {% endif %}
+                                <a href="/payment/"><button id="download" class="btn btn-danger" style="margin-top:15px; line-height:24px">打赏</button></a>
+                            </div>
+                            <div>{% game_score game.pk %}</div>
+                        </div>
+                        <div class="tab-pane fade" id="game_dl">
+                            <div class="alert alert-info">
+                                <i class="icon-info-sign"></i> 安卓游戏如不能运行需先安装谷歌服务框架和市场，下载<a target="_blank" href="http://kuai.xunlei.com/d/7CgxFG2m8WVUVAQA1b6"><span class="label label-info">谷歌安装器</span></a>一键安装，需Root<br>
+                                <i class="icon-info-sign"></i> 苹果游戏需在PC上用<a target="_blank" href="http://dl.i-funbox.com/ifunbox_setup.exe"><span class="label label-info">iFunbox</span></a>或<a target="_blank" href="http://pro.itools.cn/"><span class="label label-info">ITools</span></a>等工具进行安装<br>
+                                <i class="icon-info-sign"></i> 如果您喜欢本扑家平台或者喜欢我们的汉化游戏，欢迎<a target="_blank" href="/payment/"><span class="label label-info">打赏</span></a>支持我们的发展
+                            </div>
+                            <div>
+                                <p><a target="_blank" href="http://www.pujia8.com/link/44/"><button id="download" class="btn btn-danger" style="margin-bottom:4px; line-height:24px">安卓客户端下载</button></a> <small>收录最新最全汉化游戏，以及推荐优质游戏</small></p>
+                                {% if game.state == '1' %}{% if game.download_link %}{{ game.download_link|safe }}{% else %}<p></p>{% endif %}{% if game.apk_name %}<a target="_blank" href="{% download_link game %}"><button id="download" class="btn btn-info" style="margin-bottom:4px; line-height:24px">安卓版本地下载</button></a>{% endif %}{% endif %}
+                            </div>
+                        </div>
+                        {% if game.review_id %}
+                        <div class="tab-pane fade" id="game_review">
+                            <div>{% game_topic game.review_id %}</div>
+                        </div>
+                        {% endif %}
+                        {% if game.gospel_id %}
+                        <div class="tab-pane fade" id="game_gospel">
+                            <div>{% game_topic game.gospel_id %}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {% if user.is_authenticated %}
+                    <small class="pull-right">
+                        <a href="javascript:comment_at('{{ game.name }}')">@TA</a>
+                        {% if perm_edit_article %}<a href="/library/edit/{{ game.id }}/">编辑</a>{% endif %}
+                    </small>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% related_games game.id %}
+
+            {% lianyun_games %}
+
+            <div id="comments">
+                <div id="quick_reply" class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发射言弹</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>TIPS：如资源失效或报告BUG请<a href="javascript:comment_at('{{ game.name }}')">@{{ game.name }}</a> 反馈</p>
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_hot_comments_list for game as comments %}
+            {% include 'pujia_comments/show_hot_comments.html' %}
+
+            {% get_comments_list for game as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+        </div>
+
+        <div class="span4" id="rsbar">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% if user.is_authenticated %}
+<script type="text/javascript">
+    function gamescore(game_id){
+        var input_string = prompt("要宠幸多少PP？（{% max_score user %}）", "1");
+        if (input_string!=null && input_string!=""){
+            $.ajax({
+                url : "/library/score/" + game_id +"/",
+                type : "POST",
+                dataType: "json",
+                data : {
+                    client_response : input_string,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success : function(json) {
+                        alert(json.msg);
+                    },
+            });
+        }
+    }
+</script>
+{% endif %}
+{% endblock %}

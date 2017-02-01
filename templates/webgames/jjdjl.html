@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load comments_tags %}
+{% load flatpages %}
+
+{% block title %}
+    进击的巨龙OL_扑家汉化平台_扑家汉化组_扑家吧
+{% endblock %}
+
+{% block description %}
+    《进击的巨龙》是一款以《龙与地下城》为故事背景，使用大众耳熟能详的“龙”作为核心元素，配合幻想华丽的日系美术风格，以RPG为主并且搭配轻度SLG玩法，给予玩家另外一种神秘但是又充满魔幻魅力的龙与地下城世界。
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>进击的巨龙OL-养成策略类</h3>
+                </div>
+                <div class="modal-body">
+                    <p><img src="/static/upload/20150516153956_96.jpg" alt="进击的巨龙"></p>
+
+                    <ul id="tab" class="nav nav-tabs">
+                        <li class="active"><a href="#game_intro" data-toggle="tab"><strong>游戏介绍</strong></a></li>
+                        <li class=""><a href="#game_gospel" data-toggle="tab"><strong>游戏资料</strong></a></li>
+                    </ul>
+                    <div id="GameTabContent" class="tab-content">
+                        <div class="tab-pane fade active in" id="game_intro">
+                            {% get_flatpages '/wg_jjdjl/' as wg_jjdjl_pages %}{% for wg_jjdjl in wg_jjdjl_pages %}{{ wg_jjdjl.content|safe }}{% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="game_gospel">
+                            <legend>新手指南</legend>
+                            <div class="span2"><a href="/topic/14251/" target="_blank">游戏介绍</a></div>
+                            <div class="span2"><a href="/topic/14246/" target="_blank">游戏背景</a></div>
+                            <div class="span2"><a href="/topic/14248/" target="_blank">龙语者</a></div>
+                            <div class="span2"><a href="/topic/14247/" target="_blank">游戏界面</a></div>
+                            <div class="span2"><a href="/topic/14249/" target="_blank">VIP 特权</a></div>
+                            <div class="span2"><a href="/topic/14253/" target="_blank">聊天系统</a></div>
+                            <div class="span2"><a href="/topic/14252/" target="_blank">战斗操作指引</a></div>
+                            <div class="span2"><a href="/topic/14250/" target="_blank">新手FAQ</a></div>
+                            <legend>游戏系统</legend>
+                            <div class="span2"><a href="/topic/14240/" target="_blank">布阵系统</a></div>
+                            <div class="span2"><a href="/topic/14239/" target="_blank">酒馆系统</a></div>
+                            <div class="span2"><a href="/topic/14238/" target="_blank">龙泽系统</a></div>
+                            <div class="span2"><a href="/topic/14242/" target="_blank">扭蛋系统</a></div>
+                            <div class="span2"><a href="/topic/14241/" target="_blank">强化系统</a></div>
+                            <div class="span2"><a href="/topic/14243/" target="_blank">王国系统</a></div>
+                            <div class="span2"><a href="/topic/14244/" target="_blank">庄园系统</a></div>
+                            <legend>高手进阶</legend>
+                            <div class="span2"><a href="/topic/14255/" target="_blank">巴别塔</a></div>
+                            <div class="span2"><a href="/topic/14256/" target="_blank">龙神迷宫</a></div>
+                            <div class="span2"><a href="/topic/14257/" target="_blank">神器</a></div>
+                            <div class="span2"><a href="/topic/14260/" target="_blank">经验副本</a></div>
+                            <div class="span2"><a href="/topic/14258/" target="_blank">佣兵招募</a></div>
+                            <legend>特色玩法</legend>
+                            <div class="span2"><a href="/topic/14254/" target="_blank">精彩活动</a></div>
+                            <div class="span2"><a href="/topic/14254/" target="_blank">每日充值</a></div>
+                            <div class="span2"><a href="/topic/14254/" target="_blank">幸运转盘</a></div>
+                            <div class="span2"><a href="/topic/14254/" target="_blank">巨龙基金</a></div>
+                            <div class="span2"><a href="/topic/14254/" target="_blank">团购活动</a></div>
+                            <div class="span2"><a href="/topic/14254/" target="_blank">天天秒杀</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span8">
+            <div id="comments">
+                <div id="quick_reply" class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发射言弹</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% render_comments_form %}
+                    </div>
+                </div>
+            </div>
+
+            {% get_hot_comments_list for args as comments %}
+            {% include 'pujia_comments/show_hot_comments.html' %}
+            {% get_comments_list for args as comments %}
+            {% include 'pujia_comments/show_comments.html' %}
+
+        </div>
+        <div class="span4">
+            {% include 'sidebar.html' %}
+        </div>
+    </div>
+{% endblock %}

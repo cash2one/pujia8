@@ -1,0 +1,34 @@
+{% if user.is_authenticated %}
+    <form id="cform" action="/comment/post/" method="post">{% csrf_token %}
+        <textarea style="width:98%;" id="comment" rows="5" name="comment">提示：
+• 欢迎大家发表游戏心得或感想。
+• 言弹被5人点赞后转为“超言弹”，可获得20PP奖励。
+• 请勿灌水，内容不得少于10字。</textarea>
+        <input class="btn btn-primary" type="submit" value="发射">
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <input type="hidden" name="path" value="{{ request.path }}">
+    </form>
+    <div><span id="upload-prompt" class="pull-right" style="display:none;color:red">上传中，请稍候！</span>上传图片：<input id="filetoupload" type="file" name="filetoupload" multiple="true" style="width:200px;"></div>
+    <script type="text/javascript" src="/static/js/jquery.upload-1.0.2.min.js"></script>
+    <script type="text/javascript">
+        $('#filetoupload').change(function() {
+            $("#upload-prompt").text("上传中，请稍候！");
+            $("#upload-prompt").show();
+            if($(this).val()){
+                $(this).upload("/upload/", function(res) {
+                    if(res.status == 200){
+                        $("#upload-prompt").text(res.msg);
+                        var con = document.getElementById("comment").value;
+                        if(commentstr==con){con="";};
+                        document.getElementsByTagName('textarea')[0].focus();
+                        document.getElementById("comment").value = con+"\n"+res.url+"\n";
+                    }else{
+                        alert(res.msg);
+                    }
+                }, 'json');
+            }
+        });
+    </script>
+{% else %}
+    <p>请<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>后再发射言弹，如果你还没有账号，请先<a href="/account/register/?next={{ request.path }}" title="注册">注册</a>。</p>
+{% endif %}

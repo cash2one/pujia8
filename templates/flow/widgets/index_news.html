@@ -1,0 +1,27 @@
+{% load flow_tags %}
+<div class="row">
+    <div class="span12">
+        <div class="modal modal-fix" id="news">
+            <div class="modal-body">
+                <p class="pull-right"><a target="_blank" href="{% url 'news_index' %}">更多</a></p>
+                <ul id="tab" class="nav nav-tabs">
+                    <li class="active"><a href="#news_hot" data-toggle="tab"><strong>综合推荐</strong></a></li>
+                    {% for column in columns %}
+                    <li class=""><a href="#{{ column.name }}" data-toggle="tab"><strong>{{ column.name }}</strong></a></li>
+                    {% endfor %}
+                </ul>
+                <div id="NewsTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="news_hot">
+                        {% include 'flow/widgets/news_crumbs.html' %}
+                    </div>
+                    {% for column in columns %}
+                    <div class="tab-pane fade" id="{{ column.name }}">
+                        {% column_news column %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

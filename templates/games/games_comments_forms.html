@@ -1,0 +1,14 @@
+                        {% if user.is_authenticated %}
+                            {% load comments %}
+                            {% get_comment_form for game as form %}
+                            <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+                                {% for field in form %}
+                                    {% ifequal field.name 'content_type' %}{{ field }}{% endifequal %}{% ifequal field.name 'object_pk' %}{{ field }}{% endifequal %}{% ifequal field.name 'timestamp' %}{{ field }}{% endifequal %}{% ifequal field.name 'security_hash' %}{{ field }}{% endifequal %}{% ifequal field.name 'name' %}<input id="id_name" type="hidden" name="name" maxlength="50" value="{{ user.username }}" readonly="readonly">{% endifequal %}{% ifequal field.name 'email' %}<input id="id_email" type="hidden" name="email" value="{{ user.email }}" readonly="readonly">{% endifequal %}
+                                    {% ifequal field.name 'comment' %}<textarea style="width:98%;" id="id_comment" rows="5" name="comment"></textarea><br>{% endifequal %}
+                                {% endfor %}
+                                <input class="btn btn-primary" type="submit" value="发表评论">
+                                <input type="hidden" name="next" value="/library/{{ game.id }}/">
+                            </form>
+                        {% else %}
+                            <p>请<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>后再发表评论，如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+                        {% endif %}

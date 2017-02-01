@@ -1,0 +1,200 @@
+﻿{% extends "base.html" %}
+
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load lbforum_widget_tags %}
+
+{% block title %}
+    {% for platform in wish.platform.all %}[{{ platform }}]{% endfor %} {{ wish.title }}许愿池_扑家汉化平台_扑家汉化组
+{% endblock %}
+
+{% block content %}{% load thumbnail %}{% load flatpages %}{% load gravatar %}
+    <div class="row">
+        <div class="span8">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>{{ wish.title }}汉化许愿池</h3>
+                </div>
+                <div class="modal-body">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 20px">
+                        <tbody>
+                        <tr>
+                            <td width="180" valign="top" style="text-align: center">
+                                <a href="{{ wish.gamepack.url }}"><img src="{% thumbnail wish.gamepack 180x180 %}" alt="{{ wish.title }}"></a>
+                            </td>
+                            <td width="10"></td>
+                            <td width="auto" valign="top">
+                                <p>
+                                    立项小组：{{ wish.team }}<br>
+                                    游戏平台：{% for platform in wish.platform.all %}<a target="_blank" href="/library/category/{{ platform|lower }}/"><span class="label label-inverse">{{ platform }}</span></a> {% endfor %}<br>
+                                    游戏类型：{{ wish.game_type }}<br>
+                                    发起日期：{{ wish.add_time|date:"Y-m-d" }}<br>
+                                    截止日期：{{ wish.deadline|date:"Y-m-d" }}<br>
+
+                                <script type="text/javascript" charset="utf-8">
+                                    (function(){
+                                        var _w = 142 , _h = 32;
+                                        var param = {
+                                            url:location.href,
+                                            type:'4',
+                                            count:'', /**是否显示分享数，1显示(可选)*/
+                                            appkey:'912885643', /**您申请的应用appkey,显示分享来源(可选)*/
+                                            title:'{% for platform in wish.platform.all %}#{{ platform }}#{% endfor %} {{ wish.title }}汉化许愿池，目前许愿进度为{{ rate }}%，如果你喜欢此游戏，快来帮忙一起许愿吧！', /**分享的文字内容(可选，默认为所在页面的title)*/
+                                            pic:'', /**分享图片的路径(可选)*/
+                                            ralateUid:'2375605947', /**关联用户的UID，分享微博会@该用户(可选)*/
+                                            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+                                            rnd:new Date().valueOf()
+                                        }
+                                        var temp = [];
+                                        for( var p in param ){
+                                            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+                                        }
+                                        document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+                                    })()
+                                </script>
+                            </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>赞助商链接</strong></p>
+                    {% include 'ad740.html' %}
+
+                    <p><strong>许愿说明</strong></p>
+                    <p>{{ wish.content|safe }}</p>
+                </div>
+            </div>
+
+            {% get_flatpages '/ADdetail/' as ad_detail_pages %}{% for ad_detail in ad_detail_pages %}{{ ad_detail.content|safe }}{% endfor %}
+            {% load comments %}
+            {% get_comment_list for wish as comments %}
+            {% get_comment_count for wish as comments_count %}
+            {% get_comment_form for wish as form %}
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>发表评论</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% if user.is_authenticated %}
+                        <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+                            {% for field in form %}
+                                {% ifequal field.name 'content_type' %}{{ field }}{% endifequal %}{% ifequal field.name 'object_pk' %}{{ field }}{% endifequal %}{% ifequal field.name 'timestamp' %}{{ field }}{% endifequal %}{% ifequal field.name 'security_hash' %}{{ field }}{% endifequal %}{% ifequal field.name 'name' %}<input id="id_name" type="hidden" name="name" maxlength="50" value="{{ user.username }}" readonly="readonly">{% endifequal %}{% ifequal field.name 'email' %}<input id="id_email" type="hidden" name="email" value="{{ user.email }}" readonly="readonly">{% endifequal %}
+                                {% ifequal field.name 'comment' %}<textarea style="width:98%;" id="id_comment" rows="5" name="comment"></textarea><br>{% endifequal %}
+                            {% endfor %}
+                            <input class="btn btn-primary" type="submit" value="发表评论">
+                            <input type="hidden" name="next" value="/wish/{{ wish.id }}/">
+                        </form>
+                        {% else %}
+                            <p>请<a href="/account/login/?next={{ request.path }}" title="登录">登录</a>后再发表评论，如果你还没有账号，请先<a href="/account/register/" title="注册">注册</a>。</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% include 'show_comments_wish.html' %}
+        </div>
+
+        <div class="span4">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>许愿池状态</h3>
+                </div>
+                <div class="modal-body">
+                    <table class="table" style="margin-bottom: 0px;">
+                        <thead>
+                          <tr>
+                            <th>目标PP<br>{{ wish.pp_need }}</th>
+                            <th>当前PP<br>{{ wish.pp_now }}</th>
+                            <th>进度<br>{{ rate }}%</th>
+                          </tr>
+                        </thead>
+                      </table>
+                      <div class="progress" style="height: 8px;">
+                            <div class="bar" style="width: {{ rate }}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>协助许愿</h3>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="form-horizontal">{% csrf_token %}
+                        <p>注：每次需不少于100PP，如达成目标后因特殊情况项目取消，PP将退还给大家。</p>
+                        <div class="control-group">
+                            <div class="input-append">
+                                <input class="span2" id="wish_value" size="16" type="text"><span class="add-on">PP</span>
+                            </div>
+                            <button id="wish" class="btn btn-primary">许愿</button>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#wish").click(function(e) {
+                                    var input_string = $("#wish_value").val();
+                                    $.ajax({
+                                        url : "/wish/{{ wish.slug }}/",
+                                        type : "POST",
+                                        dataType: "json",
+                                        data : {
+                                            client_response : input_string,
+                                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                                            },
+                                            success : function(json) {
+                                                $('#wish_info').text(json.msg);
+                                            },
+                                    });
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                            });
+                        });
+                    </script>
+                    <div id="wish_info">{% if user.is_authenticated %}你拥有{{ user.get_profile.pp }}PP，<a target="_blank" href="/topic/1896/">查看如何获取PP</a>，也可进行<a target="_blank" href="/donation/"><span class="label label-important">充值</span></a>。<br>提示：请在付款说明里填扑家账号，否则无法给您加PP。{% endif %}</div>
+                </div>
+            </div>
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>发起人</h3>
+                </div>
+                <div class="modal-body">
+                    <table>
+                    <tbody>
+                    <tr>
+                        <td width="48" valign="top" style="text-align: center">
+                            {% gravatar_for_user wish.user %}
+                        </td>
+                        <td width="10"></td>
+                        <td width="auto" valign="top">
+                            <a href="/user/{{ wish.user_id }}/" target="_blank">{{ wish.user }}</a>
+                            <p>{{ wish.user.get_profile.verify }}</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>贡献排行<span class="pull-right"><small>总人数：{{ wrs|length }}</small></span></h3>
+                </div>
+                <div class="modal-body">
+                {% with wrs=wrs %}
+                    {% for wr in wrs %}
+                    <table class="ranking" {% if forloop.counter > 100 %}style="display:none"{% endif %}>
+                      <tbody>
+                        <tr>
+                          <td style="width: 10%">
+                            {% if forloop.counter == 1 %}<span class="ranking-num gold">{% else %}{% if forloop.counter == 2 %}<span class="ranking-num silver">{% else %}{% if forloop.counter == 3 %}<span class="ranking-num bronze">{% else %}<span class="ranking-num">{% endif %}{% endif %}{% endif %}{{ forloop.counter }}</span></td>
+                          <td style="width: 80%"><a target="_blank" href="/user/{{ wr.user_id }}/" title="{{ wr.user }}">{{ wr.user }}</a></td>
+                          <td style="width: 10%"><span class="pull-right">{{ wr.pp_wish }}PP</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    {% endfor %}
+                {% endwith %}
+                <div id="show_all_rank" style="text-align: center; cursor: pointer">显示全部</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

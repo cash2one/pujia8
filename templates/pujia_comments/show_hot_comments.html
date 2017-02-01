@@ -1,0 +1,38 @@
+{% if comments %}
+{% load gravatar %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load comments_tags %}
+        <div class="modal modal-fix item">
+            <div class="modal-header">
+                <h3>超言弹：{% hot_comments_count request.path %}发
+                </h3>
+            </div>
+            <div class="modal-body">
+                {% for comment in comments %}
+                <table id="c{{ comment.id }}" class="post">
+                    <tbody>
+                        <tr>
+                            <td class="avatar_td" valign="top">
+                                {% gravatar_for_user comment.name %}
+                            </td>
+                            <td width="auto" valign="top">
+                                <a href="/user/{{ comment.name_id }}/" target="_blank"><b>{{ comment.name }}</b></a>{% user_label comment.name %}
+                                <small class="pull-right">
+                                    {{ comment.date|date:"Y-m-d H:i:s" }}
+                                </small>
+                                <p>{{ comment.content|pujia_text|safe }}</p>
+                                <small class="pull-right">
+                                    {% get_like_link comment %}
+                                    <a href="javascript:comment_at('{{ comment.name }}')">@TA</a>
+                                    {% if user == comment.name %}<a href="{% url 'edit_comment' comment.pk %}">改TA</a>{% endif %}
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endfor %}
+            </div>
+        </div>
+
+{% endif %}

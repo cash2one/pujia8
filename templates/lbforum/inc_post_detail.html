@@ -1,0 +1,41 @@
+{% load i18n %}
+{% load lbforum_filters %}
+{% load lbforum_tags %}
+{% load gravatar %}
+
+{% if not post.topic_post %}
+    <table id="p{{ post.pk }}" class="post">
+        <tbody>
+        <tr>
+            <td class="avatar_td" valign="top">
+                {% if post.posted_by.get_profile.introduce %}
+                    <a href="#" rel="popover" data-content="{{ post.posted_by.get_profile.introduce|linebreaks }}" data-original-title="个人介绍">{% gravatar_for_user post.posted_by %}</a>
+                {% else %}
+                    {% gravatar_for_user post.posted_by %}
+                {% endif %}
+            </td>
+            <td width="auto" valign="top">
+                <a href="{% url 'lbforum_user_profile' post.posted_by.pk %}" target="_blank">{{ post.posted_by }}</a>{% user_label post.posted_by %}<small class="pull-right">#{% page_item_idx page_obj forloop %} - {{ post.created_on|date:"Y-m-d H:i:s" }}</small>
+                <p>{% if post.secret and post.posted_by != user and post.topic.posted_by != user %}<div class="alert">此帖仅作者可见，非请勿视！</div>{% else %}{{ post.message|pujia_text|safe }}{% endif %}</p>
+                {% post_score post.pk %}
+            {% if user.is_authenticated %}
+                <small class="pull-right">
+                    <a href="javascript:at('{{ post.posted_by }}')">@TA</a>
+                    {% if user == post.posted_by %}
+                        <a href="{% url 'lbforum_post_edit' post.pk %}">{% trans "edit" %}</a>
+                    {% endif %}
+                    {% if user.get_profile.check_in_total >= 7 %}
+                        <a href="javascript:score('{{ post.id }}')">宠幸</a>
+                    {% else %}
+                        <a href="javascript:alert('你的总签到数不足7，尚不能进行宠幸！')">宠幸</a>
+                    {% endif %}
+                    {% if perms.forum.delete_post and not post.topic_post %}
+                         <a href="{% url 'lbforum_post_delete' post.id %}" onclick="return confirm('确定要删除吗？')">{% trans "delete" %}</a>
+                    {% endif %}
+                </small>
+            {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endif %}

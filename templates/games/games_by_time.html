@@ -1,0 +1,234 @@
+﻿{% extends "base.html" %}
+
+{% block title %}
+    汉化游戏库_扑家汉化平台_扑家汉化组
+{% endblock %}
+
+{% block content %}{% load thumbnail %}
+    <ul class="breadcrumb">
+        <li><a href="/">首页</a> <span class="divider">/</span></li>
+        <li><a href="/library/">汉化发布</a> <span class="divider">/</span></li>
+        <li class="active">{{ st }}至{{ et }}期间共发布{{ games|length }}款汉化游戏</li>
+    </ul>
+
+    {% if iosgames %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-header">
+                    <h3>IOS汉化游戏（{{ iosgames|length }}款）</h3>
+                </div>
+                <div class="modal-body">
+                    {% for game in iosgames %}
+                        <div class="gametable">
+                            <div>
+                                <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img class="img-rounded" height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{% if game.hot == '1' %}<font color="#FF0000">{{ game.title_cn }}</font>{% else %}{{ game.title_cn }}{% endif %}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if androidgames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>Andriod汉化游戏（{{ androidgames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in androidgames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if pspgames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>PSP汉化游戏（{{ pspgames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in pspgames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if ndsgames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>NDS汉化游戏（{{ ndsgames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in ndsgames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if pcgames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>PC汉化游戏（{{ pcgames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in pcgames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if wiigames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>WII汉化游戏（{{ wiigames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in wiigames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if ps2games %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>PS2汉化游戏（{{ ps2games|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in ps2games %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if ps3games %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>PS3汉化游戏（{{ ps3games|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in ps3games %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if gbagames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>GBA汉化游戏（{{ gbagames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in gbagames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if etcgames %}
+        <div class="row">
+            <div class="span12">
+                <div class="modal modal-fix">
+                    <div class="modal-header">
+                        <h3>ETC汉化游戏（{{ etcgames|length }}款）</h3>
+                    </div>
+                    <div class="modal-body">
+                        {% for game in etcgames %}
+                            <div class="gametable">
+                                <div>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/"><img height="150px" src="{% thumbnail game.imagefile 150x150 %}" alt="{{ game.title_cn }}"></a><br>
+                                    <a target="_blank" title="{{ game.title_cn }}中文汉化版发布" href="/library/{{ game.id }}/">{{ game.title_cn }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

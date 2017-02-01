@@ -1,0 +1,24 @@
+﻿{% extends "base.html" %}
+
+{% block title %}汉化请愿_扑家汉化辅助系统_扑家汉化组{% endblock %}
+
+{% block content %}
+<pre>
+<i class="icon-list-alt"></i>共{{ requestslist|length }}个请愿  <i class="icon-list-alt"></i><a target="_blank" href="/request/send/" title="汉化请愿">我也要来求交配</a>
+</pre>
+{% load pagination_tags %}{% autopaginate requestslist 30 %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    <ul class="nav nav-list">
+                        {% for request in requestslist %}
+                            <li class="a"><a target="_blank" href="./{{ request.id }}/">[{{ request.get_category_display }}]{{ request.title }}[{{ request.up }}:{{ request.down }}]</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% paginate %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <div class="modal modal-fix">
+                <div class="modal-body">
+                    {% if f == 'register' %} <div class="alert alert-info">注册成功，欢迎您成为扑家一员，请登录。</div>{% endif %}
+                    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                        <table>
+                            {{ form.as_p }}
+                        </table>
+                        <input class="btn btn-primary" type="submit" value="登录">
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </form>
+                    还没账号？<a href="/account/register/?next={{ next }}" title="注册">立即注册</a> |
+                    忘记密码？你可<a href="/account/password_reset/">重置密码</a>。
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
